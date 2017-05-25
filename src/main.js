@@ -2,12 +2,10 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import jQuery from 'jquery';
 import Vue from 'vue';
-import lodash from 'lodash'
 import App from './App';
 import router from './router';
-import VueLodash from 'vue-lodash/dist/vue-lodash.min'
 
-Vue.use(VueLodash, lodash)
+window._ = require('lodash');
 
 Vue.config.productionTip = false;
 window.jQuery = jQuery;

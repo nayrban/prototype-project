@@ -137,7 +137,6 @@
 </div>
 </template>
 <script>
-import _ from 'lodash'
 export default {
   name: 'check-creation',
   data() {
@@ -403,11 +402,12 @@ export default {
   },
   computed() {
     return {
-      order_total: function() {
+      order_total() {
         if (this.selected_quantity !== '') {
-          return this._.multiply(this.selected_quantity.quantity,
+          return _.multiply(this.selected_quantity.quantity,
             this.selected_quantity.unit_price);
         }
+        return 0;
       },
     };
   },
