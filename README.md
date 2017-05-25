@@ -11,7 +11,7 @@ Hi guys to run this project you need to use npm and run <b> npm i </b> to instal
 
 
 # Libraries
-We need all those libraries and can run in a sigle line
+We need all those libraries and can run in a sigle line, but i had some troubles so ...
 - webpack  (version 2+)
 - scrpit-loader
 - node-sass
