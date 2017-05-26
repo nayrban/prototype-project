@@ -1,27 +1,27 @@
 <template>
   <div id="app" class="off-canvas-wrapper" data-off-canvas-wrapper >
     <div  data-off-canvas-content>
-    <section class="site-header">
-    <nav class="top-bar ">
-        <div class="top-bar-left">
-        </div>
-        <div class="top-bar-right" >
-          <ul class="menu" show-for-xlarge>
-            <li><a href="#"><i class="fi-list"></i> <span>One</span></a></li>
-            <li><a href="#"><i class="fi-list"></i> <span>Two</span></a></li>
-            <li><a href="#"><i class="fi-list"></i> <span>Three</span></a></li>
-            <li><a href="#"><i class="fi-list"></i> <span>Four</span></a></li>
+    <section class="pop-header">
+    <nav class="pop-header-info">
+        <div class="main-container" >
+          <span class="tagline-text">
+            PoC <br>GPS Hiring</span>
+          <ul class="menu nav-service-links " show-for-xlarge>
+            <li><a href="#"><i class="fi-list"></i> <span>Search</span></a></li>
+            <li><a href="#"><i class="fi-list"></i> <span>Help</span></a></li>
+            <li><a href="#"><i class="fi-list"></i> <span>Order Status</span></a></li>
+            <li><a href="#"><i class="fi-list"></i> <span>Login / Register</span></a></li>
           </ul>
         </div>
     </nav>
     <nav class="top-bar show-for-xlarge">
-        <div >
+        <div class="pop-container-nav">
           <div class="title-bar-left">
             <ul id="menuBar" class="vertical medium-horizontal menu" data-responsive-menu="drilldown medium-dropdown">
             <li>
-              <a href="#">Checks</a>
+              <a href="">Checks</a>
               <ul class="menu">
-                <li><a href="#">Computer Checks</a></li>
+                <li><router-link to="/check-creation" exact>Computer Checks</router-link></li>
               </ul>
             </li>
             <li>
