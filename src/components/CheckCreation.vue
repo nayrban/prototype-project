@@ -35,11 +35,9 @@
       </ul>
     </nav>
   </div>
-
   <div class="row">
     <div class="medium-6 columns">
       <img class="thumbnail" src="http://placehold.it/650x350">
-
       <label>Choose Color</label>
       <hr>
       <div class="row small-up-4">
@@ -57,11 +55,8 @@
         </div>
       </div>
     </div>
-
-
     <!-- Check Data -->
     <div id="app" class="medium-6 large-5 columns">
-
       <div v-if="!custom_view">
         <h3>From $0.10 to $0.20</h3>
         <label>Quantity
@@ -69,15 +64,12 @@
              <option disabled value="">Please select one</option>
              <option v-for="quantity in quantities" v-bind:value="quantity">{{quantity.label}}</option>
            </select>
-                 <h3 v-model="order_total">Total: ${{order_total}}</h3>
+                 <h3>Total: ${{order_total}}</h3>
            </label>
-
         <a href="#" class="button large expanded" @click.prevent="openCustomView">Personalize</a>
-
         <div class="small secondary expanded button-group">
           <label>Delivery estimation</label>
           <p>Order by 5pm CST today and we'll ship by Tuesday, 5/30 Learn more</p>
-
         </div>
       </div>
 
@@ -124,14 +116,9 @@
               <a @click.prevent="openCustomView" class="button success radius">Product Details</a>
               <a href="#" class="button primary radius">Additional information</a>
             </div>
-
-
-
           </div>
         </form>
       </div>
-
-
     </div>
   </div>
 </div>
@@ -400,30 +387,19 @@ export default {
       selected_quantity: '',
       custom_view: false,
       addressLine2View: false,
-      computed: {
-        normalizedSize() {
-          return this.size.trim().toLowerCase();
-        },
-        order_total: function () {
-          if (this.selected_quantity !== '') {
-            return _.multiply(this.selected_quantity.quantity,
-              this.selected_quantity.unit_price);
-          }
-          return 0;
-        },
-      },
     };
   },
-  computed() {
-    return {
-      order_total() {
-        if (this.selected_quantity !== '') {
-          return _.multiply(this.selected_quantity.quantity,
-            this.selected_quantity.unit_price);
-        }
-        return 0;
-      },
-    };
+  computed: {
+    normalizedSize() {
+      return this.size.trim().toLowerCase();
+    },
+    order_total() {
+      if (this.selected_quantity !== '') {
+        return _.multiply(this.selected_quantity.quantity,
+          this.selected_quantity.unit_price);
+      }
+      return 0;
+    },
   },
 };
 </script>
