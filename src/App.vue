@@ -38,7 +38,7 @@
   <!-- End Section header -->
   <!--  Section Body -->
   <section>
-    <div class='column row' id='root'>
+    <div class='row' id='root'>
       <router-view></router-view>
     </div>
   </section>

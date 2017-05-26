@@ -1,30 +1,8 @@
 <template>
 <div class="check-creation">
-  <!-- Start Top Bar -->
-  <div class="top-bar">
-    <div class="row">
-      <div class="top-bar-left">
-        <ul class="dropdown menu" data-dropdown-menu>
-          <li class="menu-text">Vue.js & Foundation Demo</li>
-          <li class="has-submenu">
-            <a href="#">One</a>
-            <ul class="submenu menu vertical" data-submenu>
-              <li><a href="#">One</a></li>
-              <li><a href="#">Two</a></li>
-              <li><a href="#">Three</a></li>
-            </ul>
-          </li>
-          <li><a href="#">Two</a></li>
-          <li><a href="#">Three</a></li>
-        </ul>
-      </div>
-    </div>
-  </div>
-  <!-- End Top Bar -->
-  <br>
   <!-- You can now combine a row and column if you just need a 12 column row -->
-  <div class="row columns">
-    <nav aria-label="You are here:" role="navigation">
+  <div class="row">
+    <nav aria-label="You are here:" role="navigation" class="large-12 column">
       <ul class="breadcrumbs">
         <li><a href="#">Home</a></li>
         <li><a href="#">Features</a></li>
