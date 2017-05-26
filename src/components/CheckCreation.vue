@@ -137,6 +137,8 @@
 </div>
 </template>
 <script>
+import _ from 'lodash';
+
 export default {
   name: 'check-creation',
   data() {
@@ -380,24 +382,36 @@ export default {
         },
       ],
       quantities: [{
-          label: '250 ($0.20 each)',
-          quantity: 250,
-          unit_price: 0.20,
-        },
-        {
-          label: '500 ($0.15 each)',
-          quantity: 500,
-          unit_price: 0.15,
-        },
-        {
-          label: '1000 ($0.10 each)',
-          quantity: 1000,
-          unit_price: 0.10,
-        },
+        label: '250 ($0.20 each)',
+        quantity: 250,
+        unit_price: 0.20,
+      },
+      {
+        label: '500 ($0.15 each)',
+        quantity: 500,
+        unit_price: 0.15,
+      },
+      {
+        label: '1000 ($0.10 each)',
+        quantity: 1000,
+        unit_price: 0.10,
+      },
       ],
       selected_quantity: '',
       custom_view: false,
       addressLine2View: false,
+      computed: {
+        normalizedSize() {
+          return this.size.trim().toLowerCase();
+        },
+        order_total: function () {
+          if (this.selected_quantity !== '') {
+            return _.multiply(this.selected_quantity.quantity,
+              this.selected_quantity.unit_price);
+          }
+          return 0;
+        },
+      },
     };
   },
   computed() {
