@@ -139,7 +139,7 @@ export default {
         startingCheckNumber: '',
         checkNumberPrefix: '',
         bankName: '',
-        status: ['Pending'],
+        status: ['pending'],
       },
       states: [
         {
@@ -420,7 +420,7 @@ export default {
       this.addressLine2View = !this.addressLine2View;
     },
     postToChekApi() {
-      this.$http.post('/checks', this.request).then((response) => {
+      this.$http.post('checks', this.request).then((response) => {
         response.headers.get('Expires');
         this.someData = response.body;
       }, (response) => {

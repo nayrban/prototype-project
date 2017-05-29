@@ -9,6 +9,7 @@ import App from './App';
 import router from './router';
 
 Vue.use(vueResource);
+Vue.http.options.root = 'http://localhost:3000';
 
 // require('createjs-easeljs');
 window._ = require('lodash');
@@ -26,10 +27,4 @@ new Vue({
   router,
   template: '<App/>',
   components: { App },
-  http: {
-    root: 'http://localhost:3000',
-    headers: {
-      ContentType: 'application/json',
-    },
-  },
 });
