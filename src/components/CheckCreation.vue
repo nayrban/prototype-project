@@ -58,12 +58,12 @@
 
             <div class="floated-label-wrapper">
               <label for="full-name">Full name</label>
-              <input type="text" id="full-name" name="full name input" placeholder="Full name" v-model="request.name">
+              <input required type="text" id="full-name" name="full name input" placeholder="Full name" v-model="request.name">
             </div>
 
             <div class="floated-label-wrapper">
               <label for="address1">Address Line 1</label>
-              <input type="text" id="address1" name="address1 input" placeholder="Address Line 1" v-model="request.addressLine1">
+              <input required type="text" id="address1" name="address1 input" placeholder="Address Line 1" v-model="request.addressLine1">
             </div>
 
             <a @click.prevent="openAddress2">Enter additional Address Info</a>
@@ -75,7 +75,7 @@
 
             <div class="floated-label-wrapper">
               <label for="city">City</label>
-              <input type="text" id="pass" name="city input" placeholder="City" v-model="request.city">
+              <input required type="text" id="pass" name="city input" placeholder="City" v-model="request.city">
             </div>
 
             <div class="floated-label-wrapper">
@@ -87,7 +87,7 @@
 
             <div class="floated-label-wrapper">
               <label for="zip">Zip</label>
-              <input type="text" id="pass" name="zip input" placeholder="Zip Code" v-model="request.zip">
+              <input required type="text" id="pass" name="zip input" placeholder="Zip Code" v-model="request.zip">
             </div>
             <a @click.prevent="openCustomView" class="button">Product Details</a>
             <a href="#" class="success button">Save</a>
