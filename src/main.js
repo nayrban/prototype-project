@@ -6,6 +6,7 @@ import Vue from 'vue';
 import App from './App';
 import router from './router';
 
+require('createjs-easeljs');
 window._ = require('lodash');
 
 Vue.config.productionTip = false;
