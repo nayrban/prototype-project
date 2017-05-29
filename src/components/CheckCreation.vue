@@ -62,7 +62,7 @@
           <div class="callout callout-config-container">
             <div class="configurator__app">
               <img src="../assets/img/checks/l-mp101b_01_pr.jpg" alt="">
-              <img id="canvas" src="../assets/img/checks/l-mp101b_01_pr.jpg" alt="">
+              <img id="canvasContainer" src="" alt="">
             </div>
           </div>
       </div>
@@ -77,14 +77,14 @@
           </div>
           <div class="config-input-group">
           <div class="form-group">
-            <label for="full-name" required="required">Name
-              <input type="text" id="full-name" name="full name input" placeholder="Full name" v-model="request.name">
+            <label for="full-name" >Name
+              <input type="text" required id="full-name" name="full name input" placeholder="Full name" v-model="request.name">
             </label>
           </div>
 
           <div class="floated-label-wrapper">
             <label for="address1">Address Line 1</label>
-            <input type="text" id="address1" name="address1 input" placeholder="Address Line 1" v-model="request.addressLine1">
+            <input required type="text" id="address1" name="address1 input" placeholder="Address Line 1" v-model="request.addressLine1">
           </div>
 
           <a @click.prevent="openAddress2">Enter additional Address Info</a>
@@ -93,39 +93,34 @@
             <label for="address2">Address Line 2</label>
             <input type="text" id="address2" name="address2 input" placeholder="Address Line 2" v-model="request.addressLine2">
           </div>
-
-          <div class="floated-label-wrapper">
-            <label for="city">City</label>
-            <input type="text" id="pass" name="city input" placeholder="City" v-model="request.city">
-          </div>
-
+            <div class="floated-label-wrapper">
+              <label for="city">City</label>
+              <input required type="text" id="pass" name="city input" placeholder="City" v-model="request.city">
+            </div>
           <div class="floated-label-wrapper">
             <label for="city">State</label>
             <select v-model="request.state">
            <option v-for="state in states" :value="state.abbreviation">{{state.name}}</option>
          </select>
           </div>
-
-          <div class="floated-label-wrapper">
-            <label for="zip">Zip</label>
-            <input type="text" id="pass" name="zip input" placeholder="Zip Code" v-model="request.zip">
+            <div class="floated-label-wrapper">
+              <label for="zip">Zip</label>
+              <input required type="text" id="pass" name="zip input" placeholder="Zip Code" v-model="request.zip">
+            </div>
+            <a @click.prevent="openCustomView" class="button">Product Details</a>
+            <a href="#" class="success button">Save</a>
           </div>
-          <a @click.prevent="openCustomView" class="button">Product Details</a>
-          <a href="#" class="success button">Save</a>
         </div>
+        </form>
         </div>
-      </form>
     </div>
     </div>
   </div>
   </div>
-</div>
 </div>
 </template>
 <script>
 import _ from 'lodash';
-
- new createjs.Stage(canvas);
 
 export default {
   name: 'check-creation',
@@ -416,6 +411,9 @@ export default {
     },
     openAddress2() {
       this.addressLine2View = !this.addressLine2View;
+    },
+    createEaselComponent() {
+
     },
   },
 };
