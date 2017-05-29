@@ -90,7 +90,7 @@
               <input required type="text" id="pass" name="zip input" placeholder="Zip Code" v-model="request.zip">
             </div>
             <a @click.prevent="openCustomView" class="button">Product Details</a>
-            <a href="#" class="success button">Save</a>
+            <a @click.prevent="postToChekApi" class="success button">Save</a>
           </div>
         </form>
       </div>
@@ -107,11 +107,18 @@ export default {
     return {
       request: {
         name: '',
+        secondNameCompany: '',
         addressLine1: '',
         addressLine2: '',
         city: '',
         state: '',
         zip: '',
+        routingNumber: '',
+        accountNumber: '',
+        startingCheckNumber: '',
+        checkNumberPrefix: '',
+        bankName: '',
+        status: ['Pending'],
       },
       states: [
         {
@@ -390,6 +397,14 @@ export default {
     },
     openAddress2() {
       this.addressLine2View = !this.addressLine2View;
+    },
+    postToChekApi() {
+      this.$http.post('localhost:3000/checks', this.request).then((response) => {
+        response.headers.get('Expires');
+        this.someData = response.body;
+      }, (response) => {
+        this.someData = response.body;
+      });
     },
   },
 };

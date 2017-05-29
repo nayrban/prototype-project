@@ -2,9 +2,12 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import jQuery from 'jquery';
 import Vue from 'vue';
+import vueResource from 'vue-resource';
 // import lodash from 'lodash';
 import App from './App';
 import router from './router';
+
+Vue.use(vueResource);
 
 window._ = require('lodash');
 
@@ -21,4 +24,10 @@ new Vue({
   router,
   template: '<App/>',
   components: { App },
+  http: {
+    root: 'http://localhost:3000',
+    headers: {
+      ContentType: 'application/json',
+    },
+  },
 });
