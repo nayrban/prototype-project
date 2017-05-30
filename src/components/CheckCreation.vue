@@ -78,41 +78,46 @@
           <div class="config-input-group">
           <div class="form-group">
             <label for="full-name" >Name
-              <input type="text" required id="full-name" name="full name input" placeholder="Full name" v-model="request.name">
+              <input type="text" id="full-name" name="name" placeholder="Full name" v-model="request.name" v-validate="'required'">
+              <span v-show="errors.has('name')" style="color:red;">{{ errors.first('name') }}</span>
             </label>
-          </div>		  
+          </div>
 		  <a @click.prevent="openNameCompany">Enter Second Name/Company</a>
 		  <br/>
 		  <div v-show="secondNameCompanyView" class="floated-label-wrapper">
             <label for="name-company">Second Name/Company</label>
             <input type="text" id="name-company" name="name-company input" placeholder="Name/Company" v-model="request.secondNameCompany">
-          </div>		 
+          </div>
           <div class="floated-label-wrapper">
             <label for="address1">Address Line 1</label>
-            <input required type="text" id="address1" name="address1 input" placeholder="Address Line 1" v-model="request.addressLine1">
-          </div>		 
+            <input required type="text" id="address1" name="address" placeholder="Address Line 1" v-model="request.addressLine1" v-validate="'required'">
+            <span v-show="errors.has('address')" style="color:red;">{{ errors.first('address') }}</span>
+          </div>
           <a @click.prevent="openAddress2">Enter additional Address Info</a>
 		  <br/>
           <div v-show="addressLine2View" class="floated-label-wrapper">
             <label for="address2">Address Line 2</label>
             <input type="text" id="address2" name="address2 input" placeholder="Address Line 2" v-model="request.addressLine2">
-          </div>		 
+          </div>
           <div class="floated-label-wrapper">
               <label for="city">City</label>
-              <input required type="text" id="pass" name="city input" placeholder="City" v-model="request.city">
+              <input required type="text" id="pass" name="city" placeholder="City" v-model="request.city" v-validate="'required'">
+              <span v-show="errors.has('city')" style="color:red;">{{ errors.first('city') }}</span>
           </div>
           <div class="floated-label-wrapper">
             <label for="city">State</label>
-            <select v-model="request.state">
+            <select v-model="request.state" name="state" v-validate="'required'">
            <option v-for="state in states" :value="state.abbreviation">{{state.name}}</option>
+           <span v-show="errors.has('state')" style="color:red;">{{ errors.first('state') }}</span>
          </select>
           </div>
             <div class="floated-label-wrapper">
               <label for="zip">Zip</label>
-              <input required type="text" id="pass" name="zip input" placeholder="Zip Code" v-model="request.zip">
+              <input required type="text" id="pass" name="zip-code" placeholder="Zip Code" v-model="request.zip" v-validate="'required'">
+              <span v-show="errors.has('zip-code')" style="color:red;">{{ errors.first('zip-code') }}</span>
             </div>
             <a @click.prevent="openCustomView" class="button">Product Details</a>
-            <a @click.prevent="postToChekApi" class="success button">Save</a>
+            <a @click.prevent="openAdditionalInfoView" class="success button">Additional Information</a>
           </div>
         </div>
         </form>
@@ -403,6 +408,7 @@ export default {
       custom_view: false,
       addressLine2View: false,
       secondNameCompanyView: false,
+      additionalInfoView: false,
     };
   },
   computed: {
@@ -426,6 +432,14 @@ export default {
     },
     openNameCompany() {
       this.secondNameCompanyView = !this.secondNameCompanyView;
+    },
+    openAdditionalInfoView() {
+      this.$validator.validateAll().then(() => {
+        this.additionalInfoView = !this.additionalInfoView;
+        this.custom_view = false;
+      }).catch(() => {
+        alert('Correct them errors!');
+      });
     },
     postToChekApi() {
       this.$http.post('checks', this.request).then((response) => {
