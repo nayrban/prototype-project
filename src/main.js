@@ -16,6 +16,9 @@ window.$ = jQuery;
 
 require('what-input');
 require('foundation-sites');
+require('yuki-createjs/lib/easeljs-0.8.2.combined');
+require('txtjs/dist/txt');
+// require('yuki-createjs');
 
 /* eslint-disable no-new */
 new Vue({

@@ -40,6 +40,7 @@ module.exports = {
   globals: {
     'Foundation': false,
     '$': false,
-    'createjs': false
+    'createjs': true,
+    'txtjs': false
   }
 }

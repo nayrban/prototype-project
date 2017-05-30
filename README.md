@@ -20,8 +20,8 @@ We need all those libraries and can run in a sigle line, but i had some troubles
 - jquery
 - what-input
 - foundation-sites
-- createjs
-- createjs easeljs
+- txtjs
+- yuki-createjs
 
 Use --save-dev to install all the libraries
 

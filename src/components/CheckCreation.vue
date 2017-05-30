@@ -61,8 +61,9 @@
       <div>
           <div class="callout callout-config-container">
             <div class="configurator__app">
-              <img src="../assets/img/checks/l-mp101b_01_pr.jpg" alt="">
+              <img id="source" src="../assets/img/checks/l-mp101b_01_pr.jpg" alt="">
               <img id="canvasContainer" src="" alt="">
+              <canvas id="canvas"></canvas>
             </div>
           </div>
       </div>
@@ -122,12 +123,16 @@
 <script>
 import _ from 'lodash';
 
+let map;
+let canvas;
+const px = 'px';
+
 export default {
   name: 'check-creation',
   data() {
     return {
       request: {
-        name: '',
+        name: 'John Doe Smith',
         addressLine1: '',
         addressLine2: '',
         city: '',
@@ -404,6 +409,19 @@ export default {
       }
       return 0;
     },
+    PIXEL_RATIO() {
+      const ctx = document.createElement('canvas').getContext('2d');
+      const dpr = window.devicePixelRatio || 1;
+      const bsr = ctx.webkitBackingStorePixelRatio ||
+        ctx.mozBackingStorePixelRatio ||
+        ctx.msBackingStorePixelRatio ||
+        ctx.oBackingStorePixelRatio ||
+        ctx.backingStorePixelRatio || 1;
+      return dpr / bsr;
+    },
+  },
+  mounted() {
+    this.load();
   },
   methods: {
     openCustomView() {
@@ -412,8 +430,41 @@ export default {
     openAddress2() {
       this.addressLine2View = !this.addressLine2View;
     },
-    createEaselComponent() {
+    createHiDPICanvas(w, h, ratio) {
+      let rationValue = ratio;
+      if (ratio === '') { rationValue = this.PIXEL_RATIO; }
+      const can = document.createElement('canvas');
+      can.width = w * rationValue;
+      can.height = h * rationValue;
+      can.style.width = w + px;
+      can.style.height = h + px;
+      can.getContext('2d').setTransform(ratio, 0, 0, ratio, 0, 0);
+      return can;
+    },
+    load() {
+      canvas = this.createHiDPICanvas(1100, 1100, 1);
+      document.body.appendChild(canvas);
+      const stage = new createjs.Stage(canvas);
 
+      map = new createjs.Bitmap('source');
+      map.x = 10;
+      map.y = 10;
+      // const scaleX = 1000;
+      // const scaleY = 1000;
+      stage.addChild(map);
+
+      stage.addChild(new txtjs.Text({
+        text: 'John Doe Smith',
+        font: 'cantarell',
+        lineHeight: 20,
+        width: 1000,
+        height: 1000,
+        align: txtjs.Align.TOP_LEFT,
+        size: 20,
+        x: 30,
+        y: 40,
+      }));
+      stage.update();
     },
   },
 };
