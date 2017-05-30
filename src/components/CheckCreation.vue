@@ -80,23 +80,27 @@
             <label for="full-name" >Name
               <input type="text" required id="full-name" name="full name input" placeholder="Full name" v-model="request.name">
             </label>
-          </div>
-
+          </div>		  
+		  <a @click.prevent="openNameCompany">Enter Second Name/Company</a>
+		  <br/>
+		  <div v-show="secondNameCompanyView" class="floated-label-wrapper">
+            <label for="name-company">Second Name/Company</label>
+            <input type="text" id="name-company" name="name-company input" placeholder="Name/Company" v-model="request.secondNameCompany">
+          </div>		 
           <div class="floated-label-wrapper">
             <label for="address1">Address Line 1</label>
             <input required type="text" id="address1" name="address1 input" placeholder="Address Line 1" v-model="request.addressLine1">
-          </div>
-
+          </div>		 
           <a @click.prevent="openAddress2">Enter additional Address Info</a>
-
+		  <br/>
           <div v-show="addressLine2View" class="floated-label-wrapper">
             <label for="address2">Address Line 2</label>
             <input type="text" id="address2" name="address2 input" placeholder="Address Line 2" v-model="request.addressLine2">
-          </div>
-            <div class="floated-label-wrapper">
+          </div>		 
+          <div class="floated-label-wrapper">
               <label for="city">City</label>
               <input required type="text" id="pass" name="city input" placeholder="City" v-model="request.city">
-            </div>
+          </div>
           <div class="floated-label-wrapper">
             <label for="city">State</label>
             <select v-model="request.state">
@@ -398,6 +402,7 @@ export default {
       selected_quantity: '',
       custom_view: false,
       addressLine2View: false,
+      secondNameCompanyView: false,
     };
   },
   computed: {
@@ -418,6 +423,9 @@ export default {
     },
     openAddress2() {
       this.addressLine2View = !this.addressLine2View;
+    },
+    openNameCompany() {
+      this.secondNameCompanyView = !this.secondNameCompanyView;
     },
     postToChekApi() {
       this.$http.post('checks', this.request).then((response) => {
