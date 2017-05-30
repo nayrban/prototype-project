@@ -19,14 +19,21 @@ module.exports = {
       : config.dev.assetsPublicPath
   },
   resolve: {
-    extensions: ['.js', '.vue', '.json'],
+    extensions: ['.js', '.vue', '.json', '.ts'],
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
-      '@': resolve('src')
+      '@': resolve('src'),
+       'node_modules': path.join(__dirname, 'node_modules'),
     },
   //  moduleDirectories: ['node_modules'],
   },
   module: {
+    loaders: [
+			{
+				test: require.resolve('createjs-easeljs'),
+				loader: 'imports?this=>window!exports?window.createjs'
+			}
+    ],
     rules: [
       {
         test: /\.(js|vue)$/,
@@ -45,7 +52,15 @@ module.exports = {
       {
         test: /\.js$/,
         loader: 'babel-loader',
+        exclude: /node_modules/,
         include: [resolve('src'), resolve('test')]
+      },
+      {
+         test: /\.ts$/,
+         loader: 'ts-loader',
+         options: {
+           transpileOnly: true
+         }
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,

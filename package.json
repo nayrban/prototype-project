@@ -17,6 +17,7 @@
     "eslint-plugin-html": "^2.0.3",
     "vue": "^2.2.6",
     "vue-router": "^2.3.1",
+    "createjs-easeljs": "^0.8.2",
     "yuki-createjs": "0.0.3",
     "txtjs": "^0.9.4"
   },
@@ -61,6 +62,7 @@
     "script-loader": "^0.7.0",
     "semver": "^5.3.0",
     "shelljs": "^0.7.6",
+    "ts-loader": "^2.1.0",
     "txtjs": "^0.9.4",
     "url-loader": "^0.5.8",
     "vue-loader": "^11.3.4",

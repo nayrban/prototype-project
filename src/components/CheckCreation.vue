@@ -60,10 +60,9 @@
     <div class="xlarge-7 columns">
       <div>
           <div class="callout callout-config-container">
-            <div class="configurator__app">
+            <div class="configurator__app" id="container" ref="container">
               <img id="source" src="../assets/img/checks/l-mp101b_01_pr.jpg" alt="">
               <img id="canvasContainer" src="" alt="">
-              <canvas id="canvas"></canvas>
             </div>
           </div>
       </div>
@@ -120,11 +119,13 @@
   </div>
 </div>
 </template>
+{{this.PIXEL_RATIO}}
 <script>
 import _ from 'lodash';
 
 let map;
 let canvas;
+// let container;
 const px = 'px';
 
 export default {
@@ -421,11 +422,11 @@ export default {
     },
   },
   mounted() {
-    this.load();
   },
   methods: {
     openCustomView() {
       this.custom_view = !this.custom_view;
+      this.initCheck();
     },
     openAddress2() {
       this.addressLine2View = !this.addressLine2View;
@@ -441,25 +442,30 @@ export default {
       can.getContext('2d').setTransform(ratio, 0, 0, ratio, 0, 0);
       return can;
     },
-    load() {
+    initCheck() {
       canvas = this.createHiDPICanvas(1100, 1100, 1);
+      // container.appendChild(canvas);
       document.body.appendChild(canvas);
+      // this.$refs.container.appendChild(canvas);
       const stage = new createjs.Stage(canvas);
 
-      map = new createjs.Bitmap('source');
+      const img = new Image();
+      img.src = '../assets/img/checks/l-mp101b_01_pr.jpg';
+
+      map = new createjs.Bitmap(img);
       map.x = 10;
       map.y = 10;
       // const scaleX = 1000;
       // const scaleY = 1000;
       stage.addChild(map);
 
-      stage.addChild(new txtjs.Text({
+      stage.addChild(new txt.Text({
         text: 'John Doe Smith',
         font: 'cantarell',
         lineHeight: 20,
         width: 1000,
         height: 1000,
-        align: txtjs.Align.TOP_LEFT,
+        align: 0,
         size: 20,
         x: 30,
         y: 40,

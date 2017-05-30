@@ -10,6 +10,7 @@ module.exports = {
     extract: isProduction
   }),
   externals: {
-     "createjs": "createjs"
+     "createjs": "createjs",
+     "txt": "txtjs/dist/txt"
   }
 }
