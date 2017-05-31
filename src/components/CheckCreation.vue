@@ -146,9 +146,9 @@
 											<input type="text" id="bankName" name="Bank Name" placeholder="Bank Name" v-model="request.bankName" v-validate="'required'">
 											<span v-show="errors.has('Bank Name')" style="color:red;">{{ errors.first('Bank Name') }}</span>
 										</div>
-										<div class="config-panel-footer"">
-										<a @click.prevent="openCustomView" class="button">Back</a>
-										<a @click.prevent="postToChekApi" class="success button">Save</a>
+										<div class="config-panel-footer" >
+											<a @click.prevent="openCustomView" class="button">Back</a>
+											<a @click.prevent="postToChekApi" class="success button">Save</a>
 									</div>
 								</div>
 							</div>
@@ -455,6 +455,10 @@ export default {
       return 0;
     },
   },
+	mounted: {
+	  //do something after mounting vue instance
+
+	},
   methods: {
     openCustomView() {
       this.personalizedView = !this.personalizedView;
