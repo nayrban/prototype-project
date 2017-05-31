@@ -68,7 +68,7 @@
 									<div class="config-input-group">
 										<div class="form-group">
 											<label for="full-name" >Name
-												<input type="text" id="full-name" maxlength="50" name="name" placeholder="Full name" v-model="request.name" v-validate="'required'">
+												<input type="text" id="full-name" maxlength="50" name="name" placeholder="Full name" v-model="name" v-validate="'required'">
 												<span v-show="errors.has('name')" style="color:red;">{{ errors.first('name') }}</span>
 											</label>
 										</div>
@@ -76,23 +76,23 @@
 										<br/>
 										<div v-show="secondNameCompanyView" class="floated-label-wrapper">
 											<label for="name-company">Second Name/Company</label>
-											<input type="text" id="name-company" maxlength="50" name="name-company input" placeholder="Name/Company" v-model="request.secondNameCompany">
+											<input type="text" id="name-company" maxlength="50" name="name-company input" placeholder="Name/Company" v-model="secondNameCompany">
 										</div>
 										<div class="floated-label-wrapper">
 											<label for="address1">Address Line 1</label>
-											<input required type="text" id="address1" maxlength="50" name="address" placeholder="Address Line 1" v-model="request.addressLine1" v-validate="'required'">
+											<input required type="text" id="address1" maxlength="50" name="address" placeholder="Address Line 1" v-model="addressLine1" v-validate="'required'">
 											<span v-show="errors.has('address')" style="color:red;">{{ errors.first('address') }}</span>
 										</div>
 										<a @click.prevent="openAddress2">Enter additional Address Info</a>
 										<br/>
 										<div v-show="addressLine2View" class="floated-label-wrapper">
 											<label for="address2">Address Line 2</label>
-											<input type="text" id="address2" maxlength="50" name="address2 input" placeholder="Address Line 2" v-model="request.addressLine2">
+											<input type="text" id="address2" maxlength="50" name="address2 input" placeholder="Address Line 2" v-model="addressLine2">
 										</div>
 										<div class="row">
 											<div class="large-4 columns">
 												<label for="city">City</label>
-												<input required type="text" id="pass" name="city" placeholder="City" v-model="request.city" v-validate="'required'">
+												<input required type="text" id="pass" name="city" placeholder="City" v-model="city" v-validate="'required'">
 												<span v-show="errors.has('city')" maxlength="25" style="color:red;">{{ errors.first('city') }}</span>
 											</div>
 											<div class="large-4 columns">
@@ -104,7 +104,7 @@
 											</div>
 											<div class="large-4 columns">
 												<label for="zip">Zip</label>
-												<input required type="text" id="pass" maxlength="10" name="zip-code" placeholder="Zip Code" v-model="request.zip" v-validate="'required|numeric'">
+												<input required type="text" id="pass" maxlength="10" name="zip-code" placeholder="Zip Code" v-model="zip" v-validate="'required|numeric'">
 												<span v-show="errors.has('zip-code')" style="color:red;">{{ errors.first('zip-code') }}</span>
 											</div>
 										</div>
@@ -120,34 +120,34 @@
 									<div class="config-input-group">
 										<div class="form-group">
 											<label for="routingNumber" >Routing Number
-												<input type="text" id="routingNumber" maxlength="9" name="Routing Number" placeholder="9-digit Routing Number" v-model="request.routingNumber"
+												<input type="text" id="routingNumber" maxlength="9" name="Routing Number" placeholder="9-digit Routing Number" v-model="routingNumber"
 												v-validate="'required|numeric|digits:9'">
 												<span v-show="errors.has('Routing Number')" style="color:red;">{{ errors.first('Routing Number') }}</span>
 											</label>
 										</div>
 										<div class="floated-label-wrapper">
 											<label for="accountNumber">Account Number</label>
-											<input type="text" id="accountNumber" name="Account Number" placeholder="Account Number" v-model="request.accountNumber" v-validate="'required'">
+											<input type="text" id="accountNumber" name="Account Number" placeholder="Account Number" v-model="accountNumber" v-validate="'required'">
 											<span v-show="errors.has('Account Number')" style="color:red;">{{ errors.first('Account Number') }}</span>
 										</div>
 										<div class="row">
 											<div class="large-4 columns">
 												<label>Starting Check Number
-													<input type="text" id="startingCheckNumber" maxlength="8" name="Starting Check Number" placeholder="Starting Check #" v-model="request.startingCheckNumber"
+													<input type="text" id="startingCheckNumber" maxlength="8" name="Starting Check Number" placeholder="Starting Check #" v-model="startingCheckNumber"
 													v-validate="'required|numeric|min_value:101'" >
 													<span v-show="errors.has('Starting Check Number')" style="color:red;">{{ errors.first('Starting Check Number') }}</span>
 												</label>
 											</div>
 											<div class="large-4 columns">
 												<label>Check Number Prefix
-													<input type="text" maxlength="2" placeholder="Check # Prefix" name="Check Number Prefix" v-model="request.checkNumberPrefix" v-validate="'required|numeric'">
+													<input type="text" maxlength="2" placeholder="Check # Prefix" name="Check Number Prefix" v-model="checkNumberPrefix" v-validate="'required|numeric'">
 													<span v-show="errors.has('Starting Check Number')" style="color:red;">{{ errors.first('Starting Check Numberr') }}</span>
 												</label>
 											</div>
 										</div>
 										<div class="floated-label-wrapper">
 											<label for="bankName">Bank Name</label>
-											<input type="text" id="bankName" maxlength="50" name="Bank Name" placeholder="Bank Name" v-model="request.bankName" v-validate="'required'">
+											<input type="text" id="bankName" maxlength="50" name="Bank Name" placeholder="Bank Name" v-model="bankName" v-validate="'required'">
 											<span v-show="errors.has('Bank Name')" style="color:red;">{{ errors.first('Bank Name') }}</span>
 										</div>
 										<div class="config-panel-footer"">
@@ -171,19 +171,19 @@ export default {
   name: 'check-creation',
   data() {
     return {
+      name: '',
+      secondNameCompany: '',
+      addressLine1: '',
+      addressLine2: '',
+      city: '',
+      state: '',
+      zip: '',
+      routingNumber: '',
+      accountNumber: '',
+      startingCheckNumber: '',
+      checkNumberPrefix: '',
+      bankName: '',
       request: {
-        name: '',
-        secondNameCompany: '',
-        addressLine1: '',
-        addressLine2: '',
-        city: '',
-        state: '',
-        zip: '',
-        routingNumber: '',
-        accountNumber: '',
-        startingCheckNumber: '',
-        checkNumberPrefix: '',
-        bankName: '',
         status: ['pending'],
       },
       states: [
@@ -447,6 +447,44 @@ export default {
       additionalInfoView: false,
     };
   },
+  watch: {
+    name(val) {
+      this.request.name = val;
+    },
+    secondNameCompany(val) {
+      this.request.secondNameCompany = val;
+    },
+    addressLine1(val) {
+      this.request.addressLine1 = val;
+    },
+    addressLine2(val) {
+      this.request.addressLine2 = val;
+    },
+    city(val) {
+      this.request.city = val;
+    },
+    state(val) {
+      this.request.state = val;
+    },
+    zip(val) {
+      this.request.zip = val;
+    },
+    routingNumber(val) {
+      this.request.routingNumber = val;
+    },
+    accountNumber(val) {
+      this.request.accountNumber = val;
+    },
+    startingCheckNumber(val) {
+      this.request.startingCheckNumber = val;
+    },
+    checkNumberPrefix(val) {
+      this.request.checkNumberPrefix = val;
+    },
+    bankName(val) {
+      this.request.bankName = val;
+    },
+  },
   computed: {
     normalizedSize() {
       return this.size.trim().toLowerCase();
@@ -471,9 +509,8 @@ export default {
       this.secondNameCompanyView = !this.secondNameCompanyView;
     },
     openAdditionalInfoView() {
-      if (this.request.name === '' || this.request.addressLine1 === ''
-          || this.request.city === '' || this.request.state === '' || this.request.zip === '') {
-        this.secondStepErrorResume = true;
+      if (this.request.name === '' || this.request.addressLine1 === '' || this.request.city === '' || this.request.state === '' || this.request.zip === '') {
+        alert('Please fill the requested information'); // eslint-disable-line no-alert
       } else {
         this.personalizedView = false;
         this.additionalInfoView = true;
@@ -488,7 +525,7 @@ export default {
           this.someData = response.body;
         });
       }).catch(() => {
-        this.secondStepErrorResume = true;
+        alert('Please fill the requested information'); // eslint-disable-line no-alert
       });
     },
     createEaselComponent() {
