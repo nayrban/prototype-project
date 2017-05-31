@@ -35,7 +35,7 @@ module.exports = {
 			},
       {
 				test: require.resolve('txtjs/dist/txt'),
-				loader: 'imports?this=>window!exports?createjs, window.txt'
+				loader: 'imports?this=>window!exports?window.txt'
 			}
     ],
     rules: [

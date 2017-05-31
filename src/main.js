@@ -6,18 +6,18 @@ import App from './App';
 import router from './router';
 
 const createjs = require('yuki-createjs');
-const txtjs = require('txtjs/dist/txt.js');
+const txt = require('txtjs/dist/txt.js');
 
 Vue.config.productionTip = false;
 Vue.use(createjs);
-Vue.use(txtjs);
+Vue.use(txt);
 // require('createjs-easeljs');
 window._ = require('lodash');
 
 window.jQuery = jQuery;
 window.$ = jQuery;
 
-window.txtjs = txtjs;
+// window.txtjs = txtjs;
 
 require('what-input');
 require('foundation-sites');

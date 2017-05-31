@@ -12,6 +12,6 @@ module.exports = {
   externals: {
     // "this": "window",
     "createjs": "createjs-easeljs",
-    "txtjs": "txtjs/dist/txt"
+    "txt": "txtjs/dist/txt"
   }
 }

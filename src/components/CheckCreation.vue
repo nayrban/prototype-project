@@ -61,8 +61,9 @@
       <div>
           <div class="callout callout-config-container">
             <div class="configurator__app" id="container" >
-              <img src="../assets/img/checks/l-mp101b_01_pr.jpg" alt="">
-              <img id="canvasContainer" src="" alt="">
+              <img src="../assets/img/checks/l-mp101b_01_pr.jpg" alt="" />
+              <img id="source" alt="" />
+              <canvas width="600" height="330" id="myCanvas" style="position:absolute; top:0; left : 0;"></canvas>
             </div>
           </div>
       </div>
@@ -108,7 +109,7 @@
               <input required type="text" id="pass" name="zip input" placeholder="Zip Code" v-model="request.zip">
             </div>
             <a @click.prevent="openCustomView" class="button">Product Details</a>
-            <a href="#" class="success button">Save</a>
+            <a @click.prevent="draw" class="success button">Save</a>
           </div>
         </div>
         </form>
@@ -123,7 +124,7 @@
 import _ from 'lodash';
 
 let map;
-let canvas;
+// let canvas;
 let stage;
 // let container;
 const px = 'px';
@@ -422,50 +423,65 @@ export default {
     },
   },
   mounted() {
-    this.$nextTick(() => {
-      this.createCanvas();
-    });
+    this.createCanvas();
   },
   methods: {
     openCustomView() {
       this.custom_view = !this.custom_view;
+    },
+    draw() {
       this.initCheck();
     },
     openAddress2() {
       this.addressLine2View = !this.addressLine2View;
     },
     createCanvas() {
-      canvas = this.createHiDPICanvas(800, 600, 1);
+      // canvas = this.createHiDPICanvas(600, 248, 1);
       // container.appendChild(canvas);
-      document.body.appendChild(canvas);
+      // document.body.appendChild(canvas);
       // this.$refs.container.appendChild(canvas);
-      stage = new window.createjs.Stage(canvas);
+      // stage = new window.createjs.Stage('myCanvas');
     },
     createHiDPICanvas(w, h, ratio) {
       let rationValue = ratio;
-      if (ratio === '') { rationValue = this.PIXEL_RATIO; }
+      if (ratio === '') { rationValue = this.PIXEL_RATIO(); }
       const can = document.createElement('canvas');
       can.width = w * rationValue;
       can.height = h * rationValue;
       can.style.width = w + px;
       can.style.height = h + px;
-      can.getContext('2d').setTransform(ratio, 0, 0, ratio, 0, 0);
+      can.getContext('2d');
       return can;
     },
     initCheck() {
-      map = new window.createjs.Bitmap('../static/img/checks/l-mp101b_01_pr.jpg');
-      map.x = 10;
-      map.y = 10;
-      map.scaleX = 1000;
-      map.scaleY = 1000;
+      stage = new window.createjs.Stage('myCanvas');
+
+      const img = new Image();
+      img.src = '../static/img/checks/l-mp101b_01_pr.jpg';
+
+      const text = new window.createjs.Text('Hello World', '12px Arial', '#0000');
+
+      map = new window.createjs.Bitmap(img);
       stage.addChild(map);
 
-      const text = new window.createjs.Text('Hello World', '20px Arial', '#0000');
-      text.x = 10;
-      text.textBaseline = 'alphabetic';
+      const container = new window.createjs.Container();
 
-      stage.addChild(text);
-      stage.update();
+      container.addChild(map, text);
+      stage.addChild(container);
+
+      text.x = 10;
+
+      // stage.addChild(text);
+      map.image.onload = function () {
+        stage.update();
+      };
+      /* const ctx = canvas.getContext('2d');
+      // Clear the canvas
+      // Insert stuff into canvas
+      ctx.clearRect(0, 0, 300, 150);
+      ctx.fillStyle = 'black';
+      ctx.font = '20px Georgia';
+      ctx.fillText('Hola', 10, 50);*/
     },
   },
 };
