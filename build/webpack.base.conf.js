@@ -32,6 +32,10 @@ module.exports = {
 			{
 				test: require.resolve('createjs-easeljs'),
 				loader: 'imports?this=>window!exports?window.createjs'
+			},
+      {
+				test: require.resolve('txtjs/dist/txt'),
+				loader: 'imports?this=>window!exports?createjs, window.txt'
 			}
     ],
     rules: [

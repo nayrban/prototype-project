@@ -39,8 +39,6 @@ module.exports = {
   },
   globals: {
     'Foundation': false,
-    '$': false,
-    'createjs': false,
-    'txt': false
+    '$': false
   }
 }

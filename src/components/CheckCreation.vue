@@ -60,8 +60,8 @@
     <div class="xlarge-7 columns">
       <div>
           <div class="callout callout-config-container">
-            <div class="configurator__app" id="container" ref="container">
-              <img id="source" src="../assets/img/checks/l-mp101b_01_pr.jpg" alt="">
+            <div class="configurator__app" id="container" >
+              <img src="../assets/img/checks/l-mp101b_01_pr.jpg" alt="">
               <img id="canvasContainer" src="" alt="">
             </div>
           </div>
@@ -119,12 +119,12 @@
   </div>
 </div>
 </template>
-{{this.PIXEL_RATIO}}
 <script>
 import _ from 'lodash';
 
 let map;
 let canvas;
+let stage;
 // let container;
 const px = 'px';
 
@@ -422,6 +422,9 @@ export default {
     },
   },
   mounted() {
+    this.$nextTick(() => {
+      this.createCanvas();
+    });
   },
   methods: {
     openCustomView() {
@@ -430,6 +433,13 @@ export default {
     },
     openAddress2() {
       this.addressLine2View = !this.addressLine2View;
+    },
+    createCanvas() {
+      canvas = this.createHiDPICanvas(800, 600, 1);
+      // container.appendChild(canvas);
+      document.body.appendChild(canvas);
+      // this.$refs.container.appendChild(canvas);
+      stage = new window.createjs.Stage(canvas);
     },
     createHiDPICanvas(w, h, ratio) {
       let rationValue = ratio;
@@ -443,33 +453,18 @@ export default {
       return can;
     },
     initCheck() {
-      canvas = this.createHiDPICanvas(1100, 1100, 1);
-      // container.appendChild(canvas);
-      document.body.appendChild(canvas);
-      // this.$refs.container.appendChild(canvas);
-      const stage = new createjs.Stage(canvas);
-
-      const img = new Image();
-      img.src = '../assets/img/checks/l-mp101b_01_pr.jpg';
-
-      map = new createjs.Bitmap(img);
+      map = new window.createjs.Bitmap('../static/img/checks/l-mp101b_01_pr.jpg');
       map.x = 10;
       map.y = 10;
-      // const scaleX = 1000;
-      // const scaleY = 1000;
+      map.scaleX = 1000;
+      map.scaleY = 1000;
       stage.addChild(map);
 
-      stage.addChild(new txt.Text({
-        text: 'John Doe Smith',
-        font: 'cantarell',
-        lineHeight: 20,
-        width: 1000,
-        height: 1000,
-        align: 0,
-        size: 20,
-        x: 30,
-        y: 40,
-      }));
+      const text = new window.createjs.Text('Hello World', '20px Arial', '#0000');
+      text.x = 10;
+      text.textBaseline = 'alphabetic';
+
+      stage.addChild(text);
       stage.update();
     },
   },

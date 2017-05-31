@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
-    "module": "txtjs",
-    "sourceMap": true
+    "module": "commonjs",
+    "sourceMap": true,
+     "allowJs": true
   },
   "files": [
-    "txt.d.ts"
+    "txtjs/dist/txt.d.ts"
   ]
 }
