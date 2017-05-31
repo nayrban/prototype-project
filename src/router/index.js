@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import VeeValidate from 'vee-validate';
-
 // Components
 import Hello from '@/components/Hello';
 import CheckCreation from '@/components/CheckCreation';

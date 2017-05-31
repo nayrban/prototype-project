@@ -1,7 +1,7 @@
 <template>
 	<div class="check-creation">
 		<form>
-      <br>
+			<br>
 			<div id="firstStepView" class="main-container"  v-show="!personalizedView && !additionalInfoView ">
 				<div class="main-container">
 					<div class="row">
@@ -68,7 +68,7 @@
 									<div class="config-input-group">
 										<div class="form-group">
 											<label for="full-name" >Name
-												<input type="text" id="full-name" name="name" placeholder="Full name" v-model="request.name" v-validate="'required'">
+												<input type="text" id="full-name" maxlength="50" name="name" placeholder="Full name" v-model="request.name" v-validate="'required'">
 												<span v-show="errors.has('name')" style="color:red;">{{ errors.first('name') }}</span>
 											</label>
 										</div>
@@ -76,35 +76,37 @@
 										<br/>
 										<div v-show="secondNameCompanyView" class="floated-label-wrapper">
 											<label for="name-company">Second Name/Company</label>
-											<input type="text" id="name-company" name="name-company input" placeholder="Name/Company" v-model="request.secondNameCompany">
+											<input type="text" id="name-company" maxlength="50" name="name-company input" placeholder="Name/Company" v-model="request.secondNameCompany">
 										</div>
 										<div class="floated-label-wrapper">
 											<label for="address1">Address Line 1</label>
-											<input required type="text" id="address1" name="address" placeholder="Address Line 1" v-model="request.addressLine1" v-validate="'required'">
+											<input required type="text" id="address1" maxlength="50" name="address" placeholder="Address Line 1" v-model="request.addressLine1" v-validate="'required'">
 											<span v-show="errors.has('address')" style="color:red;">{{ errors.first('address') }}</span>
 										</div>
 										<a @click.prevent="openAddress2">Enter additional Address Info</a>
 										<br/>
 										<div v-show="addressLine2View" class="floated-label-wrapper">
 											<label for="address2">Address Line 2</label>
-											<input type="text" id="address2" name="address2 input" placeholder="Address Line 2" v-model="request.addressLine2">
+											<input type="text" id="address2" maxlength="50" name="address2 input" placeholder="Address Line 2" v-model="request.addressLine2">
 										</div>
-										<div class="floated-label-wrapper">
-											<label for="city">City</label>
-											<input required type="text" id="pass" name="city" placeholder="City" v-model="request.city" v-validate="'required'">
-											<span v-show="errors.has('city')" style="color:red;">{{ errors.first('city') }}</span>
-										</div>
-										<div class="floated-label-wrapper">
-											<label for="city">State</label>
-											<select v-model="request.state" name="state" v-validate="'required'">
-												<option v-for="state in states" :value="state.abbreviation">{{state.name}}</option>
-												<span v-show="errors.has('state')" style="color:red;">{{ errors.first('state') }}</span>
-											</select>
-										</div>
-										<div class="floated-label-wrapper">
-											<label for="zip">Zip</label>
-											<input required type="text" id="pass" name="zip-code" placeholder="Zip Code" v-model="request.zip" v-validate="'required'">
-											<span v-show="errors.has('zip-code')" style="color:red;">{{ errors.first('zip-code') }}</span>
+										<div class="row">
+											<div class="large-4 columns">
+												<label for="city">City</label>
+												<input required type="text" id="pass" name="city" placeholder="City" v-model="request.city" v-validate="'required'">
+												<span v-show="errors.has('city')" maxlength="25" style="color:red;">{{ errors.first('city') }}</span>
+											</div>
+											<div class="large-4 columns">
+												<label for="city">State</label>
+												<select v-model="request.state" name="state" v-validate="'required'">
+													<option v-for="state in states" :value="state.abbreviation">{{state.name}}</option>
+													<span v-show="errors.has('state')" style="color:red;">{{ errors.first('state') }}</span>
+												</select>
+											</div>
+											<div class="large-4 columns">
+												<label for="zip">Zip</label>
+												<input required type="text" id="pass" maxlength="10" name="zip-code" placeholder="Zip Code" v-model="request.zip" v-validate="'required|numeric'">
+												<span v-show="errors.has('zip-code')" style="color:red;">{{ errors.first('zip-code') }}</span>
+											</div>
 										</div>
 										<a @click.prevent="openCustomView" class="button">Product Details</a>
 										<a @click.prevent="openAdditionalInfoView" class="success button">Additional Information</a>
@@ -118,7 +120,8 @@
 									<div class="config-input-group">
 										<div class="form-group">
 											<label for="routingNumber" >Routing Number
-												<input type="text" id="routingNumber" name="Routing Number" placeholder="9-digit Routing Number" v-model="request.routingNumber" v-validate="'required'">
+												<input type="text" id="routingNumber" maxlength="9" name="Routing Number" placeholder="9-digit Routing Number" v-model="request.routingNumber"
+												v-validate="'required|numeric|digits:9'">
 												<span v-show="errors.has('Routing Number')" style="color:red;">{{ errors.first('Routing Number') }}</span>
 											</label>
 										</div>
@@ -130,24 +133,25 @@
 										<div class="row">
 											<div class="large-4 columns">
 												<label>Starting Check Number
-													<input type="text" id="startingCheckNumber" name="Starting Check Number" placeholder="Starting Check #" v-model="request.startingCheckNumber" v-validate="'required'" >
-													<span v-show="errors.has('Starting Check Number')" style="color:red;">{{ errors.first('Starting Check Numberr') }}</span>
+													<input type="text" id="startingCheckNumber" maxlength="8" name="Starting Check Number" placeholder="Starting Check #" v-model="request.startingCheckNumber"
+													v-validate="'required|numeric|min_value:101'" >
+													<span v-show="errors.has('Starting Check Number')" style="color:red;">{{ errors.first('Starting Check Number') }}</span>
 												</label>
 											</div>
 											<div class="large-4 columns">
 												<label>Check Number Prefix
-													<input type="text" placeholder="Check # Prefix" name="Check Number Prefix" v-model="request.checkNumberPrefix" v-validate="'required'">
+													<input type="text" maxlength="2" placeholder="Check # Prefix" name="Check Number Prefix" v-model="request.checkNumberPrefix" v-validate="'required|numeric'">
 													<span v-show="errors.has('Starting Check Number')" style="color:red;">{{ errors.first('Starting Check Numberr') }}</span>
 												</label>
 											</div>
 										</div>
 										<div class="floated-label-wrapper">
 											<label for="bankName">Bank Name</label>
-											<input type="text" id="bankName" name="Bank Name" placeholder="Bank Name" v-model="request.bankName" v-validate="'required'">
+											<input type="text" id="bankName" maxlength="50" name="Bank Name" placeholder="Bank Name" v-model="request.bankName" v-validate="'required'">
 											<span v-show="errors.has('Bank Name')" style="color:red;">{{ errors.first('Bank Name') }}</span>
 										</div>
 										<div class="config-panel-footer"">
-										<a @click.prevent="openCustomView" class="button">Back</a>
+										<a @click.prevent="openCustomView" class="button">Previous Step</a>
 										<a @click.prevent="postToChekApi" class="success button">Save</a>
 									</div>
 								</div>
@@ -469,7 +473,7 @@ export default {
     openAdditionalInfoView() {
       if (this.request.name === '' || this.request.addressLine1 === ''
           || this.request.city === '' || this.request.state === '' || this.request.zip === '') {
-        alert('Please complete the requested Information!');
+        this.secondStepErrorResume = true;
       } else {
         this.personalizedView = false;
         this.additionalInfoView = true;
@@ -484,7 +488,7 @@ export default {
           this.someData = response.body;
         });
       }).catch(() => {
-        alert('Please complete the requested Information!');
+        this.secondStepErrorResume = true;
       });
     },
     createEaselComponent() {
