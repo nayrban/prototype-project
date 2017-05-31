@@ -6,11 +6,11 @@ import App from './App';
 import router from './router';
 
 const createjs = require('yuki-createjs');
-const txt = require('txtjs/dist/txt.js');
+// const txt = require('txtjs/dist/txt.js');
 
 Vue.config.productionTip = false;
 Vue.use(createjs);
-Vue.use(txt);
+// Vue.use(txt);
 // require('createjs-easeljs');
 window._ = require('lodash');
 

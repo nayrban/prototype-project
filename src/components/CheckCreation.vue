@@ -168,12 +168,14 @@
 <script>
 import _ from 'lodash';
 
+
 let stage;
 let textName;
 let textAddress;
 let textStartingCheckNumber;
 let textRountingNumber;
 let textAccountNumber;
+let textBankName;
 
 const imageLogoBase = '../static/img/shared/icons/fraud-armor-logo.png';
 const imageCheckBase = '../static/img/checks/l-mp101b_01_pr.jpg';
@@ -498,6 +500,8 @@ export default {
     },
     bankName(val) {
       this.request.bankName = val;
+      textBankName.text = val;
+      this.updateCheck();
     },
   },
   computed: {
@@ -516,19 +520,13 @@ export default {
     this.createCanvas();
   },
   methods: {
-    createImage(src, imageW, imageH) {
+    createImage(src) {
       const image = new Image();
       image.src = src;
-      if (imageW) {
-        image.width = imageW;
-      }
-      if (imageH) {
-        image.height = imageH;
-      }
       return image;
     },
-    createBitmap(src, imageW, imageH, xPosition, yPosition) {
-      const image = this.createImage(src, imageW, imageH);
+    createBitmap(src, xPosition, yPosition) {
+      const image = this.createImage(src);
 
       const map = new window.createjs.Bitmap(image);
       if (xPosition) {
@@ -543,25 +541,27 @@ export default {
       const text = new window.createjs.Text(textValue, fontType, fontColor);
       text.x = x;
       text.y = y;
-      text.lineWidth = textValue.length;
       return text;
     },
     createCanvas() {
       stage = new window.createjs.Stage('myCanvas');
-      const logo = this.createBitmap(imageLogoBase, null, null, 500, 20);
+      const logo = this.createBitmap(imageLogoBase, 500, 15);
 
-      const imageBody = this.createBitmap(imageCheckBase, 600, 248, 0, 0);
+      const imageBody = this.createBitmap(imageCheckBase, 0, 0);
       imageBody.scaleX = 0.75;
       imageBody.scaleY = 0.75;
 
       stage.addChild(imageBody);
       stage.addChild(logo);
 
-      textName = this.createText('', '10px Arial', '#0000', 20, 20);
+      textName = this.createText('', '10px Arial', '#0000', 20, 15);
       stage.addChild(textName);
 
-      textAddress = this.createText('', '10px Arial', '#0000', 20, 30);
+      textAddress = this.createText('', '10px Arial', '#0000', 20, 25);
       stage.addChild(textAddress);
+
+      textBankName = this.createText('', '10px Arial', '#0000', 300, 15);
+      stage.addChild(textBankName);
 
       // Footer lines
       const yFooterLine = 215;

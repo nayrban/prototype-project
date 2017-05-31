@@ -1,4 +1,4 @@
-# Check First 
+# Check First
 
 Check this first to make sure that this already exist <b> npm install -g vue-cli </b>
 
@@ -21,7 +21,11 @@ We need all those libraries and can run in a sigle line, but i had some troubles
 - what-input
 - foundation-sites
 - txtjs
+- createjs-easeljs
 - yuki-createjs
+- vue-resource
+- vue-validate
+- url-loader
 
 Use --save-dev to install all the libraries
 
