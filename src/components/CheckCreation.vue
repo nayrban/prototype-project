@@ -53,7 +53,8 @@
 							<div class="callout callout-config-container">
 								<div class="configurator__app">
 									<img src="../assets/img/checks/l-mp101b_01_pr.jpg" alt="">
-									<img id="canvasContainer" src="" alt="">
+									<img id="source" alt="" />
+									<canvas width="600" height="330" id="myCanvas" style="position:absolute; top:0; left : 0;"></canvas>
 								</div>
 							</div>
 						</div>
@@ -162,6 +163,11 @@
 </template>
 <script>
 import _ from 'lodash';
+
+let stage;
+let textName;
+const imageLogoBase = '../static/img/shared/icons/fraud-armor-logo.png';
+const imageCheckBase = '../static/img/checks/l-mp101b_01_pr.jpg';
 
 export default {
   name: 'check-creation',
@@ -455,11 +461,51 @@ export default {
       return 0;
     },
   },
-	mounted: {
-	  //do something after mounting vue instance
-
-	},
+  mounted() {
+    this.createCanvas();
+  },
   methods: {
+    createImage(src, imageW, imageH) {
+      const image = new Image();
+      image.src = src;
+      if (imageW) {
+        image.width = imageW;
+      }
+      if (imageH) {
+        image.height = imageH;
+      }
+      return image;
+    },
+    createBitmap(src, imageW, imageH, xPosition, yPosition) {
+      const image = this.createImage(src, imageW, imageH);
+
+      const map = new window.createjs.Bitmap(image);
+      if (xPosition) {
+        map.x = xPosition;
+      }
+      if (yPosition) {
+        map.y = yPosition;
+      }
+      return map;
+    },
+    createCanvas() {
+      stage = new window.createjs.Stage('myCanvas');
+      const logo = this.createBitmap(imageLogoBase, null, null, 400, 20);
+
+      const imageBody = this.createBitmap(imageCheckBase, 600, 248, 0, 0);
+
+      textName = new window.createjs.Text('', '12px Arial', '#0000');
+
+      stage.addChild(textName);
+      stage.addChild(imageBody);
+      stage.addChild(logo);
+      imageBody.image.onload = function () {
+        stage.update();
+      };
+    },
+    updateCheck() {
+      stage.update();
+    },
     openCustomView() {
       this.personalizedView = !this.personalizedView;
       this.additionalInfoView = false;
@@ -472,7 +518,7 @@ export default {
     },
     openAdditionalInfoView() {
       if (this.request.name === '' || this.request.addressLine1 === ''
-          || this.request.city === '' || this.request.state === '' || this.request.zip === '') {
+        || this.request.city === '' || this.request.state === '' || this.request.zip === '') {
         alert('Please complete the requested Information!');
       } else {
         this.personalizedView = false;
@@ -492,7 +538,6 @@ export default {
       });
     },
     createEaselComponent() {
-
     },
   },
 };
