@@ -171,11 +171,15 @@ import _ from 'lodash';
 
 let stage;
 let textName;
+let textSecondNameCompany;
 let textAddress;
 let textStartingCheckNumber;
 let textRountingNumber;
 let textAccountNumber;
 let textBankName;
+
+const personalInfoBaseXAlign = 20;
+const personalInfoBaseYAlign = 15;
 
 const imageLogoBase = '../static/img/shared/icons/fraud-armor-logo.png';
 const imageCheckBase = '../static/img/checks/l-mp101b_01_pr.jpg';
@@ -468,6 +472,8 @@ export default {
     },
     secondNameCompany(val) {
       this.request.secondNameCompany = val;
+      textSecondNameCompany.text = val;
+      this.updateCheck();
     },
     addressLine1(val) {
       this.request.addressLine1 = val;
@@ -520,6 +526,18 @@ export default {
     this.createCanvas();
   },
   methods: {
+    updatePersonalInfoPosition() {
+			// ASI NO >D
+      let newBaseYAlign = personalInfoBaseYAlign;
+      if (this.request.name !== '') {
+				textName.x = newBaseYAlign;
+        newBaseYAlign += 10;
+      }
+			if (this.request.secondNameCompany !== '') {
+				textSecondNameCompany.x = newBaseYAlign;
+        newBaseYAlign += 10;
+      }
+    },
     createImage(src) {
       const image = new Image();
       image.src = src;
@@ -554,10 +572,13 @@ export default {
       stage.addChild(imageBody);
       stage.addChild(logo);
 
-      textName = this.createText('', '10px Arial', '#0000', 20, 15);
+      textName = this.createText('', '10px Arial', '#0000', personalInfoBaseXAlign, personalInfoBaseYAlign);
       stage.addChild(textName);
 
-      textAddress = this.createText('', '10px Arial', '#0000', 20, 25);
+      textSecondNameCompany = this.createText('', '10px Arial', '#0000', personalInfoBaseXAlign, 25);
+      stage.addChild(textSecondNameCompany);
+
+      textAddress = this.createText('', '10px Arial', '#0000', personalInfoBaseXAlign, 35);
       stage.addChild(textAddress);
 
       textBankName = this.createText('', '10px Arial', '#0000', 300, 15);
