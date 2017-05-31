@@ -3,9 +3,13 @@
 import jQuery from 'jquery';
 // import createjs from 'createjs-easeljs';
 import Vue from 'vue';
+import vueResource from 'vue-resource';
 // import lodash from 'lodash';
 import App from './App';
 import router from './router';
+
+Vue.use(vueResource);
+Vue.http.options.root = 'http://localhost:3000';
 
 // require('createjs-easeljs');
 window._ = require('lodash');
