@@ -259,6 +259,9 @@ export default {
     getStates() {
       this.$http.get('states').then((response) => {
         this.states = response.body;
+        if (this.states[0] != null) {
+          this.request.state = this.states[0].abbreviation;
+        }
       }, (response) => {
         console(response); // eslint-disable-line no-alert
       });
