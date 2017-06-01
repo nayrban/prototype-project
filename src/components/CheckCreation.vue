@@ -93,8 +93,8 @@
 										<div class="row">
 											<div class="large-4 columns">
 												<label for="city">City</label>
-												<input required type="text" id="pass" name="city" placeholder="City" v-model="city" v-validate="'required'">
-												<span v-show="errors.has('city')" maxlength="25" style="color:red;">{{ errors.first('city') }}</span>
+												<input required type="text" id="pass" maxlength="25" name="city" placeholder="City" v-model="city" v-validate="'required'">
+												<span v-show="errors.has('city')" style="color:red;">{{ errors.first('city') }}</span>
 											</div>
 											<div class="large-4 columns">
 												<label for="city">State</label>
@@ -170,23 +170,34 @@ import _ from 'lodash';
 
 
 let stage;
+
+let personaInfoContainer;
 let textName;
 let textSecondNameCompany;
 let textAddress;
+let textAddress2;
+let personaDiretionContainer;
+let textCity;
+let textState;
+let textZip;
+
+let micrInfoContainer;
 let textStartingCheckNumber;
 let textRountingNumber;
 let textAccountNumber;
 let textBankName;
-let textAddress2;
-let textCity;
-let textState;
-let textZip;
+
 let textCheckNumberPrefix;
 
 // let currentpersonalInfoYAlign = 15;
 
 const personalInfoBaseXAlign = 20;
 const personalInfoBaseYAlign = 15;
+const xFooterLine = 150;
+const yFooterLine = 215;
+
+const routingNumberSymbol = 'A';
+const acountNumberSymbol = 'C';
 
 export default {
   name: 'check-creation',
@@ -199,6 +210,15 @@ export default {
       },
       fonts: {
         MICR: '18px micrenc',
+      },
+      ALIGN_DIRECTION: {
+        LEFT_TO_RIGHT: 1,
+        TOP_TO_BOTTOM: 2,
+      },
+      MICR_DEFAULT: {
+        STARTING_CK_NUMBER: '101',
+        ROUTING_NUMBRE: 'A000000000A',
+        ACCOUNT_NUMBER: '1234567890C',
       },
       secondNameCompany: '',
       addressLine1: '',
@@ -479,57 +499,75 @@ export default {
     name(val) {
       this.request.name = val;
       textName.text = val;
-      this.updateCheck();
+      this.updateContainerFields(personaInfoContainer, personalInfoBaseYAlign, 10,
+       this.ALIGN_DIRECTION.TOP_TO_BOTTOM);
     },
     secondNameCompany(val) {
       this.request.secondNameCompany = val;
       textSecondNameCompany.text = val;
-      this.updateCheck();
+      this.updateContainerFields(personaInfoContainer, personalInfoBaseYAlign, 10,
+       this.ALIGN_DIRECTION.TOP_TO_BOTTOM);
     },
     addressLine1(val) {
       this.request.addressLine1 = val;
       textAddress.text = val;
-      this.updateCheck();
+      this.updateContainerFields(personaInfoContainer, personalInfoBaseYAlign, 10,
+       this.ALIGN_DIRECTION.TOP_TO_BOTTOM);
     },
     addressLine2(val) {
       this.request.addressLine2 = val;
       textAddress2.text = val;
-      this.updateCheck();
+      this.updateContainerFields(personaInfoContainer, personalInfoBaseYAlign, 10,
+       this.ALIGN_DIRECTION.TOP_TO_BOTTOM);
     },
     city(val) {
       this.request.city = val;
       textCity.text = val;
-      this.updateCheck();
+      this.updateContainerFields(personaInfoContainer, personalInfoBaseYAlign, 10,
+       this.ALIGN_DIRECTION.TOP_TO_BOTTOM);
     },
     state(val) {
       this.request.state = val;
       textState.text = val;
-      this.updateCheck();
+      this.updateContainerFields(personaInfoContainer, personalInfoBaseYAlign, 10,
+       this.ALIGN_DIRECTION.TOP_TO_BOTTOM);
     },
     zip(val) {
       this.request.zip = val;
       textZip.text = val;
-      this.updateCheck();
+      this.updateContainerFields(personaInfoContainer, personalInfoBaseYAlign, 10,
+       this.ALIGN_DIRECTION.TOP_TO_BOTTOM);
     },
     routingNumber(val) {
       this.request.routingNumber = val;
-      textRountingNumber.text = val;
-      this.updateCheck();
+      textRountingNumber.text = val !== '' ? routingNumberSymbol + val + routingNumberSymbol : this.MICR_DEFAULT.ROUTING_NUMBRE;
+      this.updateContainerFields(micrInfoContainer, xFooterLine, 10,
+       this.ALIGN_DIRECTION.LEFT_TO_RIGHT);
     },
     accountNumber(val) {
       this.request.accountNumber = val;
-      textAccountNumber.text = val;
-      this.updateCheck();
+      textAccountNumber.text = val !== '' ? val + acountNumberSymbol : this.MICR_DEFAULT.ACCOUNT_NUMBER;
+      this.updateContainerFields(micrInfoContainer, xFooterLine, 10,
+       this.ALIGN_DIRECTION.LEFT_TO_RIGHT);
     },
     startingCheckNumber(val) {
       this.request.startingCheckNumber = val;
-      textStartingCheckNumber.text = val;
-      this.updateCheck();
+      textStartingCheckNumber.text = val !== '' ? val : this.MICR_DEFAULT.STARTING_CK_NUMBER;
+      this.updateContainerFields(micrInfoContainer, xFooterLine, 10,
+       this.ALIGN_DIRECTION.LEFT_TO_RIGHT);
     },
     checkNumberPrefix(val) {
-      this.request.checkNumberPrefix = val;
-      textCheckNumberPrefix.text = val;
-      this.updateCheck();
+      let value = val;
+      if (this.request.startingCheckNumber !== undefined && this.request.startingCheckNumber !== '') {
+        value += this.request.startingCheckNumber;
+      }
+      if (value === '') {
+        value = this.MICR_DEFAULT.STARTING_CK_NUMBER;
+      }
+      this.request.checkNumberPrefix = value;
+      textCheckNumberPrefix.text = value;
+      this.updateContainerFields(micrInfoContainer, xFooterLine, 10,
+       this.ALIGN_DIRECTION.LEFT_TO_RIGHT);
     },
     bankName(val) {
       this.request.bankName = val;
@@ -553,17 +591,27 @@ export default {
     this.createCanvas();
   },
   methods: {
-    updatePersonalInfoPosition() {
-      // ASI NO >D
-      let newBaseYAlign = personalInfoBaseYAlign;
-      if (this.request.name !== '') {
-        textName.x = newBaseYAlign;
-        newBaseYAlign += 10;
+    updateContainerFields(container, baseAligment, incremental, direction) {
+      const childs = container.children;
+      let newBaseAligments = baseAligment;
+      for (let i = 0, len = childs.length; i < len; i += 1) {
+        const child = childs[i];
+        if (child instanceof window.createjs.Text && child.text !== '') {
+          if (direction === this.ALIGN_DIRECTION.TOP_TO_BOTTOM) {
+            child.y = newBaseAligments;
+            newBaseAligments += incremental;
+          } else {
+            child.x = newBaseAligments;
+            newBaseAligments += child.getMetrics().width + incremental;
+          }
+        } else if (child instanceof window.createjs.Container && child.children > 0) {
+          const childBaseAlign = child.id === this.ALIGN_DIRECTION.TOP_TO_BOTTOM ?
+            child.y : child.x;
+          this.updateContainerFields(child, childBaseAlign, incremental, child.id);
+          child.y = newBaseAligments;
+        }
       }
-      if (this.request.secondNameCompany !== '') {
-        textSecondNameCompany.x = newBaseYAlign;
-        newBaseYAlign += 10;
-      }
+      this.updateCheck();
     },
     createImage(src) {
       const image = new Image();
@@ -590,8 +638,7 @@ export default {
     },
     createCanvas() {
       stage = new window.createjs.Stage('myCanvas');
-      const logo = this.createBitmap(this.images.imageLogoBase, 500, 15);
-
+      const logo = this.createBitmap(this.images.imageLogoBase, 500, personalInfoBaseYAlign);
       const imageBody = this.createBitmap(this.images.imageCheckBase, 0, 0);
       imageBody.scaleX = 0.75;
       imageBody.scaleY = 0.75;
@@ -599,46 +646,54 @@ export default {
       stage.addChild(imageBody);
       stage.addChild(logo);
 
-      textName = this.createText('', '10px Arial', '#0000', personalInfoBaseXAlign, personalInfoBaseYAlign);
-      stage.addChild(textName);
-
-      textSecondNameCompany = this.createText('', '10px Arial', '#0000', personalInfoBaseXAlign, 25);
-      stage.addChild(textSecondNameCompany);
-
-      textAddress = this.createText('', '10px Arial', '#0000', personalInfoBaseXAlign, 35);
-      stage.addChild(textAddress);
-
-      textAddress2 = this.createText('', '10px Arial', '#0000', personalInfoBaseXAlign, 45);
-      stage.addChild(textAddress2);
-
-      textCity = this.createText('', '10px Arial', '#0000', personalInfoBaseXAlign, 55);
-      stage.addChild(textCity);
-
-      textState = this.createText('', '10px Arial', '#0000', personalInfoBaseXAlign + 40, 55);
-      stage.addChild(textState);
-
-      textZip = this.createText('', '10px Arial', '#0000', personalInfoBaseXAlign + 80, 55);
-      stage.addChild(textZip);
+      // Create Personal Info Container
+      this.createPersonalInfoContainer();
 
       textBankName = this.createText('', '10px Arial', '#0000', 300, 15);
       stage.addChild(textBankName);
 
-      // Footer lines
-      const yFooterLine = 215;
-      textStartingCheckNumber = this.createText('12345678', this.fonts.MICR, '#0000', 150, yFooterLine);
-      const textRoutingNumberASymbol = this.createText('A', this.fonts.MICR, '#0000', 185 + textStartingCheckNumber.lineWidth, yFooterLine);
-      textRountingNumber = this.createText('12345678', this.fonts.MICR, '#0000', 150 + textStartingCheckNumber.lineWidth, yFooterLine);
-      textAccountNumber = this.createText('12345678', this.fonts.MICR, '#0000', 150, yFooterLine);
+      // Creata Footer Container
+      this.createMICRInfoContainer();
 
-
-      stage.addChild(textStartingCheckNumber);
-      stage.addChild(textRountingNumber);
-      stage.addChild(textAccountNumber);
-      stage.addChild(textRoutingNumberASymbol);
+      textCheckNumberPrefix = this.createText('101', '10px Arial', '#0000', 550, personalInfoBaseYAlign + 30);
+      stage.addChild(textCheckNumberPrefix);
 
       imageBody.image.onload = function () {
         stage.update();
       };
+      this.updateContainerFields(micrInfoContainer, xFooterLine, 10,
+        this.ALIGN_DIRECTION.LEFT_TO_RIGHT);
+    },
+    createMICRInfoContainer() {
+      micrInfoContainer = new window.createjs.Container();
+      textStartingCheckNumber = this.createText(this.MICR_DEFAULT.STARTING_CK_NUMBER, this.fonts.MICR, '#0000', xFooterLine, yFooterLine);
+      textRountingNumber = this.createText(this.MICR_DEFAULT.ROUTING_NUMBRE, this.fonts.MICR, '#0000', xFooterLine, yFooterLine);
+      textAccountNumber = this.createText(this.MICR_DEFAULT.ACCOUNT_NUMBER, this.fonts.MICR, '#0000', xFooterLine, yFooterLine);
+
+      micrInfoContainer.addChild(textStartingCheckNumber, textRountingNumber, textAccountNumber);
+      stage.addChild(micrInfoContainer);
+    },
+    createPersonalInfoContainer() {
+      personaInfoContainer = new window.createjs.Container();
+      personaInfoContainer.x = 0;
+
+      textName = this.createText('', '10px Arial', '#0000', personalInfoBaseXAlign, personalInfoBaseYAlign);
+      textSecondNameCompany = this.createText('', '10px Arial', '#0000', personalInfoBaseXAlign, 25);
+      textAddress = this.createText('', '10px Arial', '#0000', personalInfoBaseXAlign, 35);
+      textAddress2 = this.createText('', '10px Arial', '#0000', personalInfoBaseXAlign, 45);
+
+      personaDiretionContainer = new window.createjs.Container();
+
+      textCity = this.createText('', '10px Arial', '#0000', personalInfoBaseXAlign, 55);
+      textState = this.createText('', '10px Arial', '#0000', personalInfoBaseXAlign + 40, 55);
+      textZip = this.createText('', '10px Arial', '#0000', personalInfoBaseXAlign + 80, 55);
+
+      personaDiretionContainer.id = this.ALIGN_DIRECTION.LEFT_TO_RIGHT;
+      personaDiretionContainer.addChild(textCity, textState, textZip);
+      personaInfoContainer.addChild(textName, textSecondNameCompany, textAddress, textAddress2,
+        personaDiretionContainer);
+
+      stage.addChild(personaInfoContainer);
     },
     updateCheck() {
       stage.update();
