@@ -186,28 +186,7 @@ export default {
         bankName: '',
         status: ['pending'],
       },
-      states: [
-        {
-          name: 'Alabama',
-          abbreviation: 'AL',
-        },
-        {
-          name: 'Alaska',
-          abbreviation: 'AK',
-        },
-        {
-          name: 'American Samoa',
-          abbreviation: 'AS',
-        },
-        {
-          name: 'Arizona',
-          abbreviation: 'AZ',
-        },
-        {
-          name: 'Arkansas',
-          abbreviation: 'AR',
-        },
-      ],
+      states: [],
       quantities: [{
         label: '250 ($0.20 each)',
         quantity: 250,
@@ -230,6 +209,9 @@ export default {
       secondNameCompanyView: false,
       additionalInfoView: false,
     };
+  },
+  mounted() {
+    this.getStates();
   },
   computed: {
     order_total() {
@@ -271,7 +253,14 @@ export default {
           this.someData = response.body;
         });
       }).catch((e) => {
-        alert(e.message); // eslint-disable-line no-alert
+        console(e.message); // eslint-disable-line no-alert
+      });
+    },
+    getStates() {
+      this.$http.get('states').then((response) => {
+        this.states = response.body;
+      }, (response) => {
+        console(response); // eslint-disable-line no-alert
       });
     },
     createEaselComponent() {
