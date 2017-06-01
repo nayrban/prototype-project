@@ -50,13 +50,8 @@
 					<!-- custom check panel -->
 					<div class="xlarge-7 columns" v-show="personalizedView || additionalInfoView">
 						<div>
-							<div class="callout callout-config-container">
-								<div class="configurator__app">
-									<img src="../assets/img/checks/l-mp101b_01_pr.jpg" alt="">
-									<img id="source" alt="" />
-									<canvas width="600" height="248" id="myCanvas" style="position:absolute; top:0; left : 0;"></canvas>
-								</div>
-							</div>
+							<canvasComponent :textName="request.name" :textAddress="request.addressLine1" :textStartingCheckNumber="request.startingCheckNumber"
+															 :textRountingNumber="request.routingNumber" :textBankName="request.bankName" :textAccountNumber="request.accountNumber"/>
 						</div>
 					</div>
 					<div class="xlarge-5 columns">
@@ -69,7 +64,7 @@
 									<div class="config-input-group">
 										<div class="form-group">
 											<label for="full-name" >Name
-												<input type="text" id="full-name" maxlength="50" name="name" placeholder="Full name" v-model="name" v-validate="'required'">
+												<input type="text" id="full-name" maxlength="50" name="name" placeholder="Full name" v-model="request.name" v-validate="'required'">
 												<span v-show="errors.has('name')" style="color:red;">{{ errors.first('name') }}</span>
 											</label>
 										</div>
@@ -77,23 +72,23 @@
 										<br/>
 										<div v-show="secondNameCompanyView" class="floated-label-wrapper">
 											<label for="name-company">Second Name/Company</label>
-											<input type="text" id="name-company" maxlength="50" name="name-company input" placeholder="Name/Company" v-model="secondNameCompany">
+											<input type="text" id="name-company" maxlength="50" name="name-company input" placeholder="Name/Company" v-model="request.secondNameCompany">
 										</div>
 										<div class="floated-label-wrapper">
 											<label for="address1">Address Line 1</label>
-											<input required type="text" id="address1" maxlength="50" name="address" placeholder="Address Line 1" v-model="addressLine1" v-validate="'required'">
+											<input required type="text" id="address1" maxlength="50" name="address" placeholder="Address Line 1" v-model="request.addressLine1" v-validate="'required'">
 											<span v-show="errors.has('address')" style="color:red;">{{ errors.first('address') }}</span>
 										</div>
 										<a @click.prevent="openAddress2">Enter additional Address Info</a>
 										<br/>
 										<div v-show="addressLine2View" class="floated-label-wrapper">
 											<label for="address2">Address Line 2</label>
-											<input type="text" id="address2" maxlength="50" name="address2 input" placeholder="Address Line 2" v-model="addressLine2">
+											<input type="text" id="address2" maxlength="50" name="address2 input" placeholder="Address Line 2" v-model="request.addressLine2">
 										</div>
 										<div class="row">
 											<div class="large-4 columns">
 												<label for="city">City</label>
-												<input required type="text" id="pass" name="city" placeholder="City" v-model="city" v-validate="'required'">
+												<input required type="text" id="pass" name="city" placeholder="City" v-model="request.city" v-validate="'required'">
 												<span v-show="errors.has('city')" maxlength="25" style="color:red;">{{ errors.first('city') }}</span>
 											</div>
 											<div class="large-4 columns">
@@ -105,7 +100,7 @@
 											</div>
 											<div class="large-4 columns">
 												<label for="zip">Zip</label>
-												<input required type="text" id="pass" maxlength="10" name="zip-code" placeholder="Zip Code" v-model="zip" v-validate="'required|numeric'">
+												<input required type="text" id="pass" maxlength="10" name="zip-code" placeholder="Zip Code" v-model="request.zip" v-validate="'required|numeric'">
 												<span v-show="errors.has('zip-code')" style="color:red;">{{ errors.first('zip-code') }}</span>
 											</div>
 										</div>
@@ -121,34 +116,34 @@
 									<div class="config-input-group">
 										<div class="form-group">
 											<label for="routingNumber" >Routing Number
-												<input type="text" id="routingNumber" maxlength="9" name="Routing Number" placeholder="9-digit Routing Number" v-model="routingNumber"
+												<input type="text" id="routingNumber" maxlength="9" name="Routing Number" placeholder="9-digit Routing Number" v-model="request.routingNumber"
 												v-validate="'required|numeric|digits:9'">
 												<span v-show="errors.has('Routing Number')" style="color:red;">{{ errors.first('Routing Number') }}</span>
 											</label>
 										</div>
 										<div class="floated-label-wrapper">
 											<label for="accountNumber">Account Number</label>
-											<input type="text" id="accountNumber" name="Account Number" maxlength="14" placeholder="Account Number" v-model="accountNumber" v-validate="'required'">
+											<input type="text" id="accountNumber" name="Account Number" maxlength="14" placeholder="Account Number" v-model="request.accountNumber" v-validate="'required'">
 											<span v-show="errors.has('Account Number')" style="color:red;">{{ errors.first('Account Number') }}</span>
 										</div>
 										<div class="row">
 											<div class="large-4 columns">
 												<label>Starting Check Number
-													<input type="text" id="startingCheckNumber" maxlength="8" name="Starting Check Number" placeholder="Starting Check #" v-model="startingCheckNumber"
+													<input type="text" id="startingCheckNumber" maxlength="8" name="Starting Check Number" placeholder="Starting Check #" v-model="request.startingCheckNumber"
 													v-validate="'required|numeric|min_value:101'" >
 													<span v-show="errors.has('Starting Check Number')" style="color:red;">{{ errors.first('Starting Check Number') }}</span>
 												</label>
 											</div>
 											<div class="large-4 columns">
 												<label>Check Number Prefix
-													<input type="text" maxlength="2" placeholder="Check # Prefix" name="Check Number Prefix" v-model="checkNumberPrefix" v-validate="'required|numeric'">
+													<input type="text" maxlength="2" placeholder="Check # Prefix" name="Check Number Prefix" v-model="request.checkNumberPrefix" v-validate="'required|numeric'">
 													<span v-show="errors.has('Starting Check Number')" style="color:red;">{{ errors.first('Starting Check Numberr') }}</span>
 												</label>
 											</div>
 										</div>
 										<div class="floated-label-wrapper">
 											<label for="bankName">Bank Name</label>
-											<input type="text" id="bankName" maxlength="50" name="Bank Name" placeholder="Bank Name" v-model="bankName" v-validate="'required'">
+											<input type="text" id="bankName" maxlength="50" name="Bank Name" placeholder="Bank Name" v-model="request.bankName" v-validate="'required'">
 											<span v-show="errors.has('Bank Name')" style="color:red;">{{ errors.first('Bank Name') }}</span>
 										</div>
 										<div class="config-panel-footer">
@@ -167,36 +162,28 @@
 </template>
 <script>
 import _ from 'lodash';
-
-
-let stage;
-let textName;
-let textAddress;
-let textStartingCheckNumber;
-let textRountingNumber;
-let textAccountNumber;
-let textBankName;
-
-const imageLogoBase = '../static/img/shared/icons/fraud-armor-logo.png';
-const imageCheckBase = '../static/img/checks/l-mp101b_01_pr.jpg';
+import CheckCanvas from './CheckCanvas';
 
 export default {
   name: 'check-creation',
+  components: {
+    canvasComponent: CheckCanvas,
+  },
   data() {
     return {
-      name: '',
-      secondNameCompany: '',
-      addressLine1: '',
-      addressLine2: '',
-      city: '',
-      state: '',
-      zip: '',
-      routingNumber: '',
-      accountNumber: '',
-      startingCheckNumber: '',
-      checkNumberPrefix: '',
-      bankName: '',
       request: {
+        name: '',
+        secondNameCompany: '',
+        addressLine1: '',
+        addressLine2: '',
+        city: '',
+        state: '',
+        zip: '',
+        routingNumber: '',
+        accountNumber: '',
+        startingCheckNumber: '',
+        checkNumberPrefix: '',
+        bankName: '',
         status: ['pending'],
       },
       states: [
@@ -219,222 +206,6 @@ export default {
         {
           name: 'Arkansas',
           abbreviation: 'AR',
-        },
-        {
-          name: 'California',
-          abbreviation: 'CA',
-        },
-        {
-          name: 'Colorado',
-          abbreviation: 'CO',
-        },
-        {
-          name: 'Connecticut',
-          abbreviation: 'CT',
-        },
-        {
-          name: 'Delaware',
-          abbreviation: 'DE',
-        },
-        {
-          name: 'District Of Columbia',
-          abbreviation: 'DC',
-        },
-        {
-          name: 'Federated States Of Micronesia',
-          abbreviation: 'FM',
-        },
-        {
-          name: 'Florida',
-          abbreviation: 'FL',
-        },
-        {
-          name: 'Georgia',
-          abbreviation: 'GA',
-        },
-        {
-          name: 'Guam',
-          abbreviation: 'GU',
-        },
-        {
-          name: 'Hawaii',
-          abbreviation: 'HI',
-        },
-        {
-          name: 'Idaho',
-          abbreviation: 'ID',
-        },
-        {
-          name: 'Illinois',
-          abbreviation: 'IL',
-        },
-        {
-          name: 'Indiana',
-          abbreviation: 'IN',
-        },
-        {
-          name: 'Iowa',
-          abbreviation: 'IA',
-        },
-        {
-          name: 'Kansas',
-          abbreviation: 'KS',
-        },
-        {
-          name: 'Kentucky',
-          abbreviation: 'KY',
-        },
-        {
-          name: 'Louisiana',
-          abbreviation: 'LA',
-        },
-        {
-          name: 'Maine',
-          abbreviation: 'ME',
-        },
-        {
-          name: 'Marshall Islands',
-          abbreviation: 'MH',
-        },
-        {
-          name: 'Maryland',
-          abbreviation: 'MD',
-        },
-        {
-          name: 'Massachusetts',
-          abbreviation: 'MA',
-        },
-        {
-          name: 'Michigan',
-          abbreviation: 'MI',
-        },
-        {
-          name: 'Minnesota',
-          abbreviation: 'MN',
-        },
-        {
-          name: 'Mississippi',
-          abbreviation: 'MS',
-        },
-        {
-          name: 'Missouri',
-          abbreviation: 'MO',
-        },
-        {
-          name: 'Montana',
-          abbreviation: 'MT',
-        },
-        {
-          name: 'Nebraska',
-          abbreviation: 'NE',
-        },
-        {
-          name: 'Nevada',
-          abbreviation: 'NV',
-        },
-        {
-          name: 'New Hampshire',
-          abbreviation: 'NH',
-        },
-        {
-          name: 'New Jersey',
-          abbreviation: 'NJ',
-        },
-        {
-          name: 'New Mexico',
-          abbreviation: 'NM',
-        },
-        {
-          name: 'New York',
-          abbreviation: 'NY',
-        },
-        {
-          name: 'North Carolina',
-          abbreviation: 'NC',
-        },
-        {
-          name: 'North Dakota',
-          abbreviation: 'ND',
-        },
-        {
-          name: 'Northern Mariana Islands',
-          abbreviation: 'MP',
-        },
-        {
-          name: 'Ohio',
-          abbreviation: 'OH',
-        },
-        {
-          name: 'Oklahoma',
-          abbreviation: 'OK',
-        },
-        {
-          name: 'Oregon',
-          abbreviation: 'OR',
-        },
-        {
-          name: 'Palau',
-          abbreviation: 'PW',
-        },
-        {
-          name: 'Pennsylvania',
-          abbreviation: 'PA',
-        },
-        {
-          name: 'Puerto Rico',
-          abbreviation: 'PR',
-        },
-        {
-          name: 'Rhode Island',
-          abbreviation: 'RI',
-        },
-        {
-          name: 'South Carolina',
-          abbreviation: 'SC',
-        },
-        {
-          name: 'South Dakota',
-          abbreviation: 'SD',
-        },
-        {
-          name: 'Tennessee',
-          abbreviation: 'TN',
-        },
-        {
-          name: 'Texas',
-          abbreviation: 'TX',
-        },
-        {
-          name: 'Utah',
-          abbreviation: 'UT',
-        },
-        {
-          name: 'Vermont',
-          abbreviation: 'VT',
-        },
-        {
-          name: 'Virgin Islands',
-          abbreviation: 'VI',
-        },
-        {
-          name: 'Virginia',
-          abbreviation: 'VA',
-        },
-        {
-          name: 'Washington',
-          abbreviation: 'WA',
-        },
-        {
-          name: 'West Virginia',
-          abbreviation: 'WV',
-        },
-        {
-          name: 'Wisconsin',
-          abbreviation: 'WI',
-        },
-        {
-          name: 'Wyoming',
-          abbreviation: 'WY',
         },
       ],
       quantities: [{
@@ -460,54 +231,7 @@ export default {
       additionalInfoView: false,
     };
   },
-  watch: {
-    name(val) {
-      this.request.name = val;
-      textName.text = val;
-      this.updateCheck();
-    },
-    secondNameCompany(val) {
-      this.request.secondNameCompany = val;
-    },
-    addressLine1(val) {
-      this.request.addressLine1 = val;
-      textAddress.text = val;
-      this.updateCheck();
-    },
-    addressLine2(val) {
-      this.request.addressLine2 = val;
-    },
-    city(val) {
-      this.request.city = val;
-    },
-    state(val) {
-      this.request.state = val;
-    },
-    zip(val) {
-      this.request.zip = val;
-    },
-    routingNumber(val) {
-      this.request.routingNumber = val;
-    },
-    accountNumber(val) {
-      this.request.accountNumber = val;
-    },
-    startingCheckNumber(val) {
-      this.request.startingCheckNumber = val;
-    },
-    checkNumberPrefix(val) {
-      this.request.checkNumberPrefix = val;
-    },
-    bankName(val) {
-      this.request.bankName = val;
-      textBankName.text = val;
-      this.updateCheck();
-    },
-  },
   computed: {
-    normalizedSize() {
-      return this.size.trim().toLowerCase();
-    },
     order_total() {
       if (this.selected_quantity !== '') {
         return _.multiply(this.selected_quantity.quantity,
@@ -516,73 +240,7 @@ export default {
       return 0;
     },
   },
-  mounted() {
-    this.createCanvas();
-  },
   methods: {
-    createImage(src) {
-      const image = new Image();
-      image.src = src;
-      return image;
-    },
-    createBitmap(src, xPosition, yPosition) {
-      const image = this.createImage(src);
-
-      const map = new window.createjs.Bitmap(image);
-      if (xPosition) {
-        map.x = xPosition;
-      }
-      if (yPosition) {
-        map.y = yPosition;
-      }
-      return map;
-    },
-    createText(textValue, fontType, fontColor, x, y) {
-      const text = new window.createjs.Text(textValue, fontType, fontColor);
-      text.x = x;
-      text.y = y;
-      return text;
-    },
-    createCanvas() {
-      stage = new window.createjs.Stage('myCanvas');
-      const logo = this.createBitmap(imageLogoBase, 500, 15);
-
-      const imageBody = this.createBitmap(imageCheckBase, 0, 0);
-      imageBody.scaleX = 0.75;
-      imageBody.scaleY = 0.75;
-
-      stage.addChild(imageBody);
-      stage.addChild(logo);
-
-      textName = this.createText('', '10px Arial', '#0000', 20, 15);
-      stage.addChild(textName);
-
-      textAddress = this.createText('', '10px Arial', '#0000', 20, 25);
-      stage.addChild(textAddress);
-
-      textBankName = this.createText('', '10px Arial', '#0000', 300, 15);
-      stage.addChild(textBankName);
-
-      // Footer lines
-      const yFooterLine = 215;
-      textStartingCheckNumber = this.createText('12345678', '18px micrenc', '#0000', 150, yFooterLine);
-      const textRoutingNumberASymbol = this.createText('A', '22px micrenc', '#0000', 185 + textStartingCheckNumber.lineWidth, yFooterLine);
-      textRountingNumber = this.createText('12345678', '18px micrenc', '#0000', 150 + textStartingCheckNumber.lineWidth, yFooterLine);
-      textAccountNumber = this.createText('12345678', '18px micrenc', '#0000', 150, yFooterLine);
-
-
-      stage.addChild(textStartingCheckNumber);
-      stage.addChild(textRountingNumber);
-      stage.addChild(textAccountNumber);
-      stage.addChild(textRoutingNumberASymbol);
-
-      imageBody.image.onload = function () {
-        stage.update();
-      };
-    },
-    updateCheck() {
-      stage.update();
-    },
     openCustomView() {
       this.personalizedView = !this.personalizedView;
       this.additionalInfoView = false;
@@ -594,7 +252,8 @@ export default {
       this.secondNameCompanyView = !this.secondNameCompanyView;
     },
     openAdditionalInfoView() {
-      if (this.request.name === '' || this.request.addressLine1 === '' || this.request.city === '' || this.request.state === '' || this.request.zip === '') {
+      if (this.request.name === '' || this.request.addressLine1 === '' || this.request.city === ''
+          || this.request.state === '' || this.request.zip === '') {
         alert('Please fill the requested information'); // eslint-disable-line no-alert
       } else {
         this.personalizedView = false;
@@ -603,14 +262,16 @@ export default {
     },
     postToChekApi() {
       this.$validator.validateAll().then(() => {
+        this.request.unitAmount = this.selected_quantity.unit_price;
+        this.request.quantity = this.selected_quantity.quantity;
         this.$http.post('checks', this.request).then((response) => {
           response.headers.get('Expires');
           this.someData = response.body;
         }, (response) => {
           this.someData = response.body;
         });
-      }).catch(() => {
-        alert('Please fill the requested information'); // eslint-disable-line no-alert
+      }).catch((e) => {
+        alert(e.message); // eslint-disable-line no-alert
       });
     },
     createEaselComponent() {
