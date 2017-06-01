@@ -253,7 +253,7 @@ export default {
           this.someData = response.body;
         });
       }).catch((e) => {
-        console(e.message); // eslint-disable-line no-alert
+        console.log(e.message); // eslint-disable-line no-alert
       });
     },
     getStates() {
@@ -263,7 +263,7 @@ export default {
           this.request.state = this.states[0].abbreviation;
         }
       }, (response) => {
-        console(response); // eslint-disable-line no-alert
+        console.log(response); // eslint-disable-line no-alert
       });
     },
     createEaselComponent() {
