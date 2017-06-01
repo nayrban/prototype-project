@@ -177,18 +177,29 @@ let textStartingCheckNumber;
 let textRountingNumber;
 let textAccountNumber;
 let textBankName;
+let textAddress2;
+let textCity;
+let textState;
+let textZip;
+let textCheckNumberPrefix;
+
+// let currentpersonalInfoYAlign = 15;
 
 const personalInfoBaseXAlign = 20;
 const personalInfoBaseYAlign = 15;
-
-const imageLogoBase = '../static/img/shared/icons/fraud-armor-logo.png';
-const imageCheckBase = '../static/img/checks/l-mp101b_01_pr.jpg';
 
 export default {
   name: 'check-creation',
   data() {
     return {
       name: '',
+      images: {
+        imageLogoBase: '../static/img/shared/icons/fraud-armor-logo.png',
+        imageCheckBase: '../static/img/checks/l-mp101b_01_pr.jpg',
+      },
+      fonts: {
+        MICR: '18px micrenc',
+      },
       secondNameCompany: '',
       addressLine1: '',
       addressLine2: '',
@@ -482,27 +493,43 @@ export default {
     },
     addressLine2(val) {
       this.request.addressLine2 = val;
+      textAddress2.text = val;
+      this.updateCheck();
     },
     city(val) {
       this.request.city = val;
+      textCity.text = val;
+      this.updateCheck();
     },
     state(val) {
       this.request.state = val;
+      textState.text = val;
+      this.updateCheck();
     },
     zip(val) {
       this.request.zip = val;
+      textZip.text = val;
+      this.updateCheck();
     },
     routingNumber(val) {
       this.request.routingNumber = val;
+      textRountingNumber.text = val;
+      this.updateCheck();
     },
     accountNumber(val) {
       this.request.accountNumber = val;
+      textAccountNumber.text = val;
+      this.updateCheck();
     },
     startingCheckNumber(val) {
       this.request.startingCheckNumber = val;
+      textStartingCheckNumber.text = val;
+      this.updateCheck();
     },
     checkNumberPrefix(val) {
       this.request.checkNumberPrefix = val;
+      textCheckNumberPrefix.text = val;
+      this.updateCheck();
     },
     bankName(val) {
       this.request.bankName = val;
@@ -527,14 +554,14 @@ export default {
   },
   methods: {
     updatePersonalInfoPosition() {
-			// ASI NO >D
+      // ASI NO >D
       let newBaseYAlign = personalInfoBaseYAlign;
       if (this.request.name !== '') {
-				textName.x = newBaseYAlign;
+        textName.x = newBaseYAlign;
         newBaseYAlign += 10;
       }
-			if (this.request.secondNameCompany !== '') {
-				textSecondNameCompany.x = newBaseYAlign;
+      if (this.request.secondNameCompany !== '') {
+        textSecondNameCompany.x = newBaseYAlign;
         newBaseYAlign += 10;
       }
     },
@@ -563,9 +590,9 @@ export default {
     },
     createCanvas() {
       stage = new window.createjs.Stage('myCanvas');
-      const logo = this.createBitmap(imageLogoBase, 500, 15);
+      const logo = this.createBitmap(this.images.imageLogoBase, 500, 15);
 
-      const imageBody = this.createBitmap(imageCheckBase, 0, 0);
+      const imageBody = this.createBitmap(this.images.imageCheckBase, 0, 0);
       imageBody.scaleX = 0.75;
       imageBody.scaleY = 0.75;
 
@@ -581,15 +608,27 @@ export default {
       textAddress = this.createText('', '10px Arial', '#0000', personalInfoBaseXAlign, 35);
       stage.addChild(textAddress);
 
+      textAddress2 = this.createText('', '10px Arial', '#0000', personalInfoBaseXAlign, 45);
+      stage.addChild(textAddress2);
+
+      textCity = this.createText('', '10px Arial', '#0000', personalInfoBaseXAlign, 55);
+      stage.addChild(textCity);
+
+      textState = this.createText('', '10px Arial', '#0000', personalInfoBaseXAlign + 40, 55);
+      stage.addChild(textState);
+
+      textZip = this.createText('', '10px Arial', '#0000', personalInfoBaseXAlign + 80, 55);
+      stage.addChild(textZip);
+
       textBankName = this.createText('', '10px Arial', '#0000', 300, 15);
       stage.addChild(textBankName);
 
       // Footer lines
       const yFooterLine = 215;
-      textStartingCheckNumber = this.createText('12345678', '18px micrenc', '#0000', 150, yFooterLine);
-      const textRoutingNumberASymbol = this.createText('A', '22px micrenc', '#0000', 185 + textStartingCheckNumber.lineWidth, yFooterLine);
-      textRountingNumber = this.createText('12345678', '18px micrenc', '#0000', 150 + textStartingCheckNumber.lineWidth, yFooterLine);
-      textAccountNumber = this.createText('12345678', '18px micrenc', '#0000', 150, yFooterLine);
+      textStartingCheckNumber = this.createText('12345678', this.fonts.MICR, '#0000', 150, yFooterLine);
+      const textRoutingNumberASymbol = this.createText('A', this.fonts.MICR, '#0000', 185 + textStartingCheckNumber.lineWidth, yFooterLine);
+      textRountingNumber = this.createText('12345678', this.fonts.MICR, '#0000', 150 + textStartingCheckNumber.lineWidth, yFooterLine);
+      textAccountNumber = this.createText('12345678', this.fonts.MICR, '#0000', 150, yFooterLine);
 
 
       stage.addChild(textStartingCheckNumber);
