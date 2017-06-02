@@ -10,6 +10,7 @@ const createjs = require('yuki-createjs');
 
 Vue.config.productionTip = false;
 Vue.use(createjs);
+
 // Vue.use(txt);
 // require('createjs-easeljs');
 window._ = require('lodash');
