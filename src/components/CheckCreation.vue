@@ -50,7 +50,7 @@
 					<!-- custom check panel -->
 					<div class="xlarge-7 columns" v-show="personalizedView || additionalInfoView">
 						<div>
-							<canvasComponent :textName="request.name" :textAddress="request.addressLine1" :textStartingCheckNumber="request.startingCheckNumber"
+							<canvasComponent  :textCheckNumberPrefix="request.checkNumberPrefix" :textZip="request.zip" :textState="request.state" :textCity="request.city" :textSecondNameCompany="request.secondNameCompany" :textAddressLine2="request.addressLine2" :textName="request.name" :textAddress="request.addressLine1" :textStartingCheckNumber="request.startingCheckNumber"
 															 :textRountingNumber="request.routingNumber" :textBankName="request.bankName" :textAccountNumber="request.accountNumber"/>
 						</div>
 					</div>
@@ -88,8 +88,8 @@
 										<div class="row">
 											<div class="large-4 columns">
 												<label for="city">City</label>
-												<input required type="text" id="pass" name="city" placeholder="City" v-model="request.city" v-validate="'required'">
-												<span v-show="errors.has('city')" maxlength="25" style="color:red;">{{ errors.first('city') }}</span>
+												<input required type="text" id="pass"  maxlength="25" name="city" placeholder="City" v-model="request.city" v-validate="'required'">
+												<span v-show="errors.has('city')" style="color:red;">{{ errors.first('city') }}</span>
 											</div>
 											<div class="large-4 columns">
 												<label for="city">State</label>
@@ -143,7 +143,7 @@
 										</div>
 										<div class="floated-label-wrapper">
 											<label for="bankName">Bank Name</label>
-											<input type="text" id="bankName" maxlength="50" name="Bank Name" placeholder="Bank Name" v-model="request.bankName" v-validate="'required'">
+											<input type="text" id="bankName" maxlength="50" name="Bank Name" placeholder="Bank Name" v-on:input="updateValue($event.target, canvasComponent.textBankName)" v-model="request.bankName" v-validate="'required'">
 											<span v-show="errors.has('Bank Name')" style="color:red;">{{ errors.first('Bank Name') }}</span>
 										</div>
 										<div class="config-panel-footer">
@@ -162,6 +162,7 @@
 </template>
 <script>
 import _ from 'lodash';
+import EventBus from '../event-bus';
 import CheckCanvas from './CheckCanvas';
 
 export default {
@@ -223,6 +224,10 @@ export default {
     },
   },
   methods: {
+    updateValue(target, prop) {
+      EventBus.$emit('reply', target, prop);
+      // console.log(target.value);
+    },
     openCustomView() {
       this.personalizedView = !this.personalizedView;
       this.additionalInfoView = false;

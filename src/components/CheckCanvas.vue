@@ -10,11 +10,19 @@
       <span hidden>{{ textRountingNumber }}</span>
       <span hidden>{{ textBankName }}</span>
       <span hidden>{{ textAccountNumber }}</span>
+      <span hidden>{{ textAddressLine2 }}</span>
+      <span hidden>{{ textSecondNameCompany }}</span>
+      <span hidden>{{ textCity }}</span>
+      <span hidden>{{ textState }}</span>
+      <span hidden>{{ textZip }}</span>
+      <span hidden>{{ textCheckNumberPrefix }}</span>
+
     </div>
   </div>
 </template>
 
 <script>
+import EventBus from '../event-bus';
 
 let stage;
 
@@ -68,6 +76,7 @@ export default {
     };
   },
   mounted() {
+    this.registerListener();
     this.createCanvas();
   },
   props: [
@@ -77,7 +86,9 @@ export default {
     'textStartingCheckNumber',
     'textRountingNumber',
     'textBankName',
+    'textSecondNameCompany',
     'textAccountNumber',
+    'textCheckNumberPrefix',
     'textCity',
     'textState',
     'textZip',
@@ -100,6 +111,7 @@ export default {
     },
     textStartingCheckNumber(val) {
       textStartingCheckNumber.text = val !== '' ? val : this.MICR_DEFAULT.STARTING_CK_NUMBER;
+      this.setCheckNumberPrefixValue(this.textCheckNumberPrefix);
       this.updateContainerFields(micrInfoContainer, xFooterLine, 10,
        this.ALIGN_DIRECTION.LEFT_TO_RIGHT);
     },
@@ -117,56 +129,48 @@ export default {
       this.updateContainerFields(micrInfoContainer, xFooterLine, 10,
        this.ALIGN_DIRECTION.LEFT_TO_RIGHT);
     },
-    secondNameCompany(val) {
-      this.request.secondNameCompany = val;
+    textSecondNameCompany(val) {
       textSecondNameCompany.text = val;
       this.updateContainerFields(personaInfoContainer, personalInfoBaseYAlign, 10,
        this.ALIGN_DIRECTION.TOP_TO_BOTTOM);
     },
-    addressLine2(val) {
-      this.request.addressLine2 = val;
-      textAddress2.text = val;
-      this.updateContainerFields(personaInfoContainer, personalInfoBaseYAlign, 10,
-       this.ALIGN_DIRECTION.TOP_TO_BOTTOM);
-    },
     textCity(val) {
-      this.request.city = val;
       textCity.text = val;
       this.updateContainerFields(personaInfoContainer, personalInfoBaseYAlign, 10,
        this.ALIGN_DIRECTION.TOP_TO_BOTTOM);
     },
     textState(val) {
-      this.request.state = val;
       textState.text = val;
       this.updateContainerFields(personaInfoContainer, personalInfoBaseYAlign, 10,
        this.ALIGN_DIRECTION.TOP_TO_BOTTOM);
     },
     textZip(val) {
-      this.request.zip = val;
       textZip.text = val;
       this.updateContainerFields(personaInfoContainer, personalInfoBaseYAlign, 10,
        this.ALIGN_DIRECTION.TOP_TO_BOTTOM);
     },
-    checkNumberPrefix(val) {
+    textCheckNumberPrefix(val) {
+      this.setCheckNumberPrefixValue(val);
+      this.updateContainerFields(micrInfoContainer, xFooterLine, 10,
+       this.ALIGN_DIRECTION.LEFT_TO_RIGHT);
+    },
+  },
+  methods: {
+    setCheckNumberPrefixValue(val) {
       let value = val;
-      if (this.request.startingCheckNumber !== undefined && this.request.startingCheckNumber !== '') {
-        value += this.request.startingCheckNumber;
+      if (this.textStartingCheckNumber !== undefined && this.textStartingCheckNumber !== '') {
+        value += this.textStartingCheckNumber;
       }
       if (value === '') {
         value = this.MICR_DEFAULT.STARTING_CK_NUMBER;
       }
-      this.request.checkNumberPrefix = value;
       textCheckNumberPrefix.text = value;
-      this.updateContainerFields(micrInfoContainer, xFooterLine, 10,
-       this.ALIGN_DIRECTION.LEFT_TO_RIGHT);
     },
-    bankName(val) {
-      this.request.bankName = val;
-      textBankName.text = val;
-      this.updateCheck();
+    registerListener() {
+      EventBus.$on('reply', (target) => {
+        console.log(target);
+      });
     },
-  },
-  methods: {
     updateContainerFields(container, baseAligment, incremental, direction) {
       const childs = container.children;
       let newBaseAligments = baseAligment;
@@ -180,11 +184,13 @@ export default {
             child.x = newBaseAligments;
             newBaseAligments += child.getMetrics().width + incremental;
           }
-        } else if (child instanceof window.createjs.Container && child.children > 0) {
+        } else if (child instanceof window.createjs.Container && child.children.length > 0) {
+          // need to think a litle bit more this part of the function,
+          // is hardcoded to the personaDiretionContainer
           const childBaseAlign = child.id === this.ALIGN_DIRECTION.TOP_TO_BOTTOM ?
             child.y : child.x;
-          this.updateContainerFields(child, childBaseAlign, incremental, child.id);
-          child.y = newBaseAligments;
+          this.updateContainerFields(child, childBaseAlign - 20, incremental, child.id);
+          // child.y = newBaseAligments;
         }
       }
       this.updateCheck();
@@ -231,7 +237,7 @@ export default {
       // Creata Footer Container
       this.createMICRInfoContainer();
 
-      textCheckNumberPrefix = this.createText('101', '10px Arial', '#0000', 550, personalInfoBaseYAlign + 30);
+      textCheckNumberPrefix = this.createText(this.MICR_DEFAULT.STARTING_CK_NUMBER, '10px Arial', '#0000', 510, personalInfoBaseYAlign + 30);
       stage.addChild(textCheckNumberPrefix);
 
       imageBody.image.onload = function () {
@@ -260,12 +266,13 @@ export default {
 
       personaDiretionContainer = new window.createjs.Container();
 
-      textCity = this.createText('', '10px Arial', '#0000', personalInfoBaseXAlign, 55);
-      textState = this.createText('', '10px Arial', '#0000', personalInfoBaseXAlign + 40, 55);
-      textZip = this.createText('', '10px Arial', '#0000', personalInfoBaseXAlign + 80, 55);
+      textCity = this.createText('', '10px Arial', '#0000', 0, 55);
+      textState = this.createText('', '10px Arial', '#0000', 0, 55);
+      textZip = this.createText('', '10px Arial', '#0000', 0, 55);
 
       personaDiretionContainer.id = this.ALIGN_DIRECTION.LEFT_TO_RIGHT;
       personaDiretionContainer.addChild(textCity, textState, textZip);
+      personaDiretionContainer.x = personalInfoBaseXAlign;
       personaInfoContainer.addChild(textName, textSecondNameCompany, textAddress, textAddress2,
         personaDiretionContainer);
 
